@@ -1,9 +1,12 @@
 import os
 import xlsxwriter
+from tqdm import tqdm
 
+from research_edm.DATA.class_mapping import unmap_category, classes_grades, classes_categories
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
+from research_edm.inference.model_instantiation import cls_task
 from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping
 
 
@@ -80,18 +83,18 @@ def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_fi
     """
     # evaluate 10-fold
     sum_conf_matrix = None
-    for i in range(0, 10):
-        print("---------------------------------" + str(i) + "---------------------------------------")
-        xs, gts_one_hot, model = ready_for_eval[i]
-        preds_one_hot = model.predict(xs)
-        # gts = labels_mapping.inverse_transform(gts_one_hot)
-        # preds = labels_mapping.inverse_transform(preds_one_hot)
-        gts = gts_one_hot
-        preds = list([str(round(x)) for x in preds_one_hot])  # TODO: THIS IS FOR REGRESSION
+    for i in tqdm(range(0, 10), desc="k-fold evaluating..."):
+        xs, gts, wrapped_model = ready_for_eval[i]
+        preds = wrapped_model.model.predict(xs)
 
-
-        # TODO: bad one_hot_mapping dump... (order mistaked or something)
-
+        if wrapped_model.task_type == cls_task:
+            gts = labels_mapping.inverse_transform(gts)
+            preds = labels_mapping.inverse_transform(preds)
+        else:
+            if wrapped_model.data_type == "categories":
+                preds = list([unmap_category(int(round(x))) for x in preds])
+            else:
+                preds = list([str((int(round(x)))) for x in preds])
 
         conf_matrix = get_confusion_matrix(gts, preds, classes)  # TODO: https://en.wikipedia.org/wiki/Confusion_matrix
         if sum_conf_matrix is None:
@@ -189,12 +192,12 @@ def main_evaluation(results_paths, learning):
 
         if data_type == "grades":
             dump_xlsx_file = os.path.join(base_dump_xlxs, learning, "grades", pre_name, dset_name + ".xlsx")
-            classes = ['4', '5', '6', '7', '8', '9', '10']
+            classes = classes_grades
         else:
             dump_xlsx_file = os.path.join(base_dump_xlxs, learning, "categories", pre_name, dset_name + ".xlsx")
-            classes = ["E", "G", "S", "F"]  # TODO: change to 5 classes for new research
+            classes = classes_categories
 
-        if learning == "supervised":
+        if learning == "supervised":  # principle open-closed not respected below...
             for word in ["_asinh", "_identic", "_log", "_norm", "_mlp", "_nb", "_lr", "_sgdr", "_tr", "_poly"]:
                 if word in dset_name:
                     dset_name = "".join(dset_name.split(word))
@@ -207,24 +210,7 @@ def main_evaluation(results_paths, learning):
 
 
 if __name__ == '__main__':
-    # base_path = 'C:\\Users\\George\\PycharmProjects\\research_edm\\research_edm\\clustering\\clustering_dump\\identic\\'
-    # paths = [['En_plf_2019-2020_note_identic_umap.pkl', 'En_plf_2019-2020_note_identic_tnse.pkl'],
-    #          ['En_plf_2020-2021_(online)_note_identic_umap.pkl', 'En_plf_2020-2021_(online)_note_identic_tnse.pkl'],
-    #          ['plf_2019-2020_note_identic_umap.pkl', 'plf_2019-2020_note_identic_tnse.pkl'],
-    #          ['plf_2020-2021_(online)_note_identic_umap.pkl', 'plf_2020-2021_(online)_note_identic_tnse.pkl'],
-    #          ['En_plf_2019-2020_categorii_identic_umap.pkl', 'En_plf_2019-2020_categorii_identic_tnse.pkl'],
-    #          ['En_plf_2020-2021_(online)_categorii_identic_umap.pkl', 'En_plf_2020-2021_(online)_categorii_identic_tnse.pkl'],
-    #          ['plf_2019-2020_categorii_identic_umap.pkl', 'plf_2019-2020_categorii_identic_tnse.pkl'],
-    #          ['plf_2020-2021_(online)_categorii_identic_umap.pkl', 'plf_2020-2021_(online)_categorii_identic_tnse.pkl']]
     base_path = 'C:\\Users\\George\\PycharmProjects\\research_edm\\research_edm\\inference\\trained_classifiers\\'
-    # paths = [[os.path.join(base_path, 'grades\\identic\\En_plf_2019-2020_note_norm_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\En_plf_2020-2021_(online)_note_norm_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\plf_2019-2020_note_norm_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\plf_2020-2021_(online)_note_norm_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\En_plf_2019-2020_categorii_norm_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\En_plf_2020-2021_(online)_categorii_norm_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\plf_2019-2020_categorii_norm_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\plf_2020-2021_(online)_categorii_norm_identic_mlp.pkl')]]
 
     # TODO: REGRESSION
     paths = [[os.path.join(base_path, 'grades\\identic\\En_plf_2019-2020_note_norm_identic_poly.pkl')],
@@ -248,5 +234,4 @@ if __name__ == '__main__':
 
     for paths_to_models in paths:
         # main_evaluation([os.path.join(base_path, x) for x in pair], "unsupervised")
-
-        main_evaluation(paths_to_models, "supervised")  # TODO: evaluate / infer only classes / grades
+        main_evaluation(paths_to_models, "supervised")

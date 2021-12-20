@@ -25,7 +25,7 @@ def main_delete():
     for path in all_save_paths:
         files = glob.glob(path + "/*")
         for f in files:
-            os.remove(f)
+            os.remove(f)  # TODO: research_edm/inference/trained_classifiers/grades/identic is not seen ???
             print(f)
 
 

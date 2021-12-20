@@ -2,6 +2,11 @@
 
 __pycache__
 
-research_edm\normalisation\
-results_paths_dump\
-research_edm\inference\
+research_edm/normalisation/datasets_mean_stdev_dumps/
+results_paths_dump/
+research_edm/inference/trained_classifiers/
+research_edm/inference/datasets_shuffle_mask/
+research_edm/evaluation/results/
+research_edm/clustering/clustering_dump/
+research_edm/clustering/plot_dump/
+research_edm/inference/labels_mapping_dump/

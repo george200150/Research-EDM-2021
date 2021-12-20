@@ -1,5 +1,6 @@
 import os
 from sklearn.preprocessing import LabelBinarizer
+from tqdm import tqdm
 
 from research_edm.configs.paths import dataset_listings_path, datasets_base_path, mapping_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
@@ -11,7 +12,7 @@ def main_generate_mappings():
     ds_fd = open(dataset_listings_path, "r")
     datasets = [x.strip() for x in ds_fd.readlines()]
 
-    for dataset in datasets:
+    for dataset in tqdm(datasets, desc='Generating datasets one-hot mappings...'):
         get_mapping(dataset)
 
 

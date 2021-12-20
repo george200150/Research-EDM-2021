@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from tqdm import tqdm
 
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.io.pickle_io import dump_data, get_mask
@@ -30,7 +31,7 @@ def main_generate_masks():
     ds_fd = open(dataset_listings_path, "r")
     datasets = [x.strip() for x in ds_fd.readlines()]
 
-    for dataset in datasets:
+    for dataset in tqdm(datasets, desc='Generating datasets random shuffle masks...'):
         get_shuffle_mask(dataset)
 
 

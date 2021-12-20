@@ -2,7 +2,7 @@ import os
 
 
 # TODO: change to desired path
-path_to_project = r"C:\Users\George\PycharmProjects\research_edm"
+path_to_project = r"C:\Users\George\PycharmProjects\Research-EDM-2021"
 
 
 results_paths_dump_base = os.path.join(path_to_project, r"results_paths_dump")
