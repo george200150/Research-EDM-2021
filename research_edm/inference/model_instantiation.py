@@ -10,6 +10,7 @@ from sklearn.neural_network import MLPClassifier
 cls_task = "classification"
 reg_task = "regression"
 
+# TODO: add grades / categories information here
 
 class ModelWrapper:
     def __init__(self, sklearn_model, model_name, task_type, data_type=None):

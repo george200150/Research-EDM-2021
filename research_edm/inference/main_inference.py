@@ -19,10 +19,10 @@ def cross_train_model(wrapped_model, features, labels, test_size):
     for i in tqdm(range(0, 10), desc="k-fold training model {}...".format(wrapped_model.name)):
         x_train, x_test = train_test_split(features, test_size=test_size, random_state=i)
         y_train, y_test = train_test_split(labels, test_size=test_size, random_state=i)
-        if wrapped_model.model == cls_task:
+        if wrapped_model.task_type == cls_task:
             wrapped_model.model = wrapped_model.model.fit(x_train, y_train)
         else:
-            if 'E' in labels or 'G' in labels or 'S' in labels or 'F' in labels:  # todo: 'V' in labels for 5 classes
+            if wrapped_model.data_type == "categories":
                 wrapped_model.model = wrapped_model.model.fit(x_train, list([map_category(x) for x in y_train]))
             else:
                 wrapped_model.model = wrapped_model.model.fit(x_train, list([float(x) for x in y_train]))

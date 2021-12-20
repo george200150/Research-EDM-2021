@@ -106,10 +106,10 @@ def read_parsed_yml():
 if __name__ == '__main__':
     preprocessings, normalisation, active_models, models_configs = read_parsed_yml()
 
-    main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, active_models, models_configs)
+    # main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, active_models, models_configs)
     # creates randomly generated masks, that are consistent cross-experiment
 
-    # main_pipeline_supervised_TRAIN_OVERWRITE(preprocessings, normalisation, active_models, models_configs)
+    main_pipeline_supervised_TRAIN_OVERWRITE(preprocessings, normalisation, active_models, models_configs)
     # uses previously generated files; overwrites data, labels and models
 
     # main_pipeline_supervised_ONLY_EVAL()

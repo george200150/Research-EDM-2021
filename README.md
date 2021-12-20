@@ -7,4 +7,3 @@ todo:
 - implement labeling... (research topic)
 
 - check correct parameter mapping !!! (SKLEARN MODELS)
-- check correct confusion matrix !!! (TRANSPOSE, FLIP)

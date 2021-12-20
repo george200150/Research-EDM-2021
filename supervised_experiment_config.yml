@@ -2,7 +2,8 @@ experiment:
   preprocessings: ["identic"]  # "asinh", "identic", "log"
   normalisation: True  # False
   models:
-    active: ['sgdr', 'tr', 'poly']  # 'mlp', 'nb', 'lr', 'sgdr', 'tr', 'poly'
+#    active: ['sgdr', 'tr', 'poly']  # 'mlp', 'nb', 'lr', 'sgdr', 'tr', 'poly'
+    active: ['mlp']  # 'mlp', 'nb', 'lr', 'sgdr', 'tr', 'poly'
     configs:
       mlp:
         hidden_layer_sizes: (100,)
