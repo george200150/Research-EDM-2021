@@ -20,13 +20,13 @@ def fix_random_seeds():
     np.random.seed(seed)
 
 
-def main_pipeline_unsupervised():
+def main_pipeline_unsupervised(normalisation):
     fix_random_seeds()
 
     preprocessings = [identic, asinh, log]
     wrap_preprocs = [Wrap(x) for x in preprocessings]
     for fun in wrap_preprocs:
-        results_paths = main_cluster(fun)
+        results_paths = main_cluster(fun, normalisation)
         main_evaluation(results_paths, "unsupervised")
 
 
@@ -115,4 +115,4 @@ if __name__ == '__main__':
     # main_pipeline_supervised_ONLY_EVAL()
     # evaluates the already trained classifiers (double checking only)
 
-    # main_pipeline_unsupervised()
+    # main_pipeline_unsupervised(normalisation)

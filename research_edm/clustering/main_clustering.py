@@ -1,12 +1,14 @@
 import os
 
 from sklearn.cluster import KMeans
-import numpy as np
-import random
 
+from research_edm.DATA.class_mapping import classes_grades, classes_categories
 from research_edm.clustering.visualization import visualize_3d_clustering, generate_colors_per_class_7cls, \
     generate_colors_per_class_4cls
+from research_edm.configs.paths import dset_mean_stdev_dump_base, datasets_base_path, plot_dump_base, \
+    dataset_listings_path
 from research_edm.dataloader.feature_extractor import get_features_labels
+from research_edm.inference.model_instantiation import get_data_type, grades_type
 from research_edm.io.pickle_io import get_mean_std, dump_data
 from research_edm.normalisation.postprocessing import identic, Wrap
 
@@ -14,28 +16,15 @@ from umap import UMAP
 from sklearn.manifold import TSNE
 
 
-datasets_base_path = r"C:\Users\George\PycharmProjects\research_edm\research_edm\DATA"
-dataset_listings_path = r"C:\Users\George\PycharmProjects\research_edm\research_edm\DATA\dataset_listings.txt"
-dset_mean_stdev_dump_base = \
-    r"C:\Users\George\PycharmProjects\research_edm\research_edm\normalisation\datasets_mean_stdev_dumps"
-clustering_dump_base = r"C:\Users\George\PycharmProjects\research_edm\research_edm\clustering\clustering_dump"
-plot_dump_base = r"C:\Users\George\PycharmProjects\research_edm\research_edm\clustering\plot_dump"
-
-
-def cluster_dataset(dset, transform):
-    seed = 10
-    random.seed(seed)
-    # torch.manual_seed(seed)
-    np.random.seed(seed)
-
+def cluster_dataset(dset, transform, normalisation):
     dset_name = dset.split("/")[-1].split(".")[0]
     mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
-    if "note" in dset:  # grades
+    if get_data_type(dset) == grades_type:
         color_scheme = generate_colors_per_class_7cls()
-        no_cls = 7
+        no_cls = len(classes_grades)
     else:
         color_scheme = generate_colors_per_class_4cls()
-        no_cls = 4
+        no_cls = len(classes_categories)
 
     mean, stdev = get_mean_std(os.path.join(dset_mean_stdev_dump_base, mean_stdev_pkl_name))
 
@@ -44,7 +33,7 @@ def cluster_dataset(dset, transform):
         transform=transform,
         mean=mean,
         stdev=stdev,
-        normalise=True,
+        normalise=normalisation,
         num_images=None  # consider all images
     )
     paths = []
@@ -90,16 +79,16 @@ def cluster_dataset(dset, transform):
     return paths
 
 
-def main_cluster(transform):
+def main_cluster(transform, normalisation):
     ds_fd = open(dataset_listings_path, "r")
     datasets = [x.strip() for x in ds_fd.readlines()]
 
     paths = []
     for dataset in datasets:
-        paths.append(cluster_dataset(dataset, transform))
+        paths.append(cluster_dataset(dataset, transform, normalisation))
     return paths
 
 
 if __name__ == '__main__':
-    paths = main_cluster(Wrap(identic))
+    paths = main_cluster(Wrap(identic), True)
     print(paths)
