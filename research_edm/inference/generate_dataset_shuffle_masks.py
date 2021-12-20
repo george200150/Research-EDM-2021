@@ -3,6 +3,7 @@ import numpy as np
 from tqdm import tqdm
 
 from research_edm.dataloader.feature_extractor import get_features_labels
+from research_edm.inference.model_instantiation import get_data_type
 from research_edm.io.pickle_io import dump_data, get_mask
 from research_edm.normalisation.postprocessing import Wrap, identic
 from research_edm.configs.paths import datasets_base_path, mask_dump_base, dataset_listings_path
@@ -10,7 +11,7 @@ from research_edm.configs.paths import datasets_base_path, mask_dump_base, datas
 
 def get_shuffle_mask(dset):
     dset_name = dset.split("/")[-1].split(".")[0]
-    data_type = "grades" if "note" in dset_name else "categories"
+    data_type = get_data_type(dset_name)
 
     features, labels = get_features_labels(
         data_file=os.path.join(datasets_base_path, dset),
@@ -41,7 +42,7 @@ def test_shuffle_data():
     dset = datasets[0]
 
     dset_name = dset.split("/")[-1].split(".")[0]
-    data_type = "grades" if "note" in dset_name else "categories"
+    data_type = get_data_type(dset_name)
     mask = get_mask(os.path.join(mask_dump_base, data_type, dset_name + ".pkl"))
 
     features, labels = get_features_labels(

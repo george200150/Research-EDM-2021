@@ -4,6 +4,7 @@ from tqdm import tqdm
 
 from research_edm.configs.paths import dataset_listings_path, datasets_base_path, mapping_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
+from research_edm.inference.model_instantiation import get_data_type
 from research_edm.io.pickle_io import dump_data
 from research_edm.normalisation.postprocessing import Wrap, identic
 
@@ -18,7 +19,7 @@ def main_generate_mappings():
 
 def get_mapping(dset):
     dset_name = dset.split("/")[-1].split(".")[0]
-    data_type = "grades" if "note" in dset_name else "categories"
+    data_type = get_data_type(dset_name)
 
     _, labels = get_features_labels(
         data_file=os.path.join(datasets_base_path, dset),

@@ -5,5 +5,3 @@ todo:
 - bring clustering up to standards
 
 - implement labeling... (research topic)
-
-- check correct parameter mapping !!! (SKLEARN MODELS)

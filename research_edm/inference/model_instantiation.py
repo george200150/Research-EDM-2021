@@ -10,7 +10,14 @@ from sklearn.neural_network import MLPClassifier
 cls_task = "classification"
 reg_task = "regression"
 
-# TODO: add grades / categories information here
+grades_type = "grades"
+categories_type = "categories"
+
+
+def get_data_type(dset_name):
+    data_type = grades_type if "note" in dset_name else categories_type
+    return data_type
+
 
 class ModelWrapper:
     def __init__(self, sklearn_model, model_name, task_type, data_type=None):

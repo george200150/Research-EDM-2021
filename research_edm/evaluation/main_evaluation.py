@@ -6,7 +6,7 @@ from research_edm.DATA.class_mapping import unmap_category, classes_grades, clas
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
-from research_edm.inference.model_instantiation import cls_task
+from research_edm.inference.model_instantiation import cls_task, get_data_type, categories_type, grades_type
 from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping
 
 
@@ -91,12 +91,12 @@ def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_fi
             gts = labels_mapping.inverse_transform(gts)
             preds = labels_mapping.inverse_transform(preds)
         else:
-            if wrapped_model.data_type == "categories":
+            if wrapped_model.data_type == categories_type:
                 preds = list([unmap_category(int(round(x))) for x in preds])
             else:
                 preds = list([str((int(round(x)))) for x in preds])
 
-        conf_matrix = get_confusion_matrix(gts, preds, classes)  # TODO: https://en.wikipedia.org/wiki/Confusion_matrix
+        conf_matrix = get_confusion_matrix(gts, preds, classes)
         if sum_conf_matrix is None:
             sum_conf_matrix = conf_matrix
         else:
@@ -105,16 +105,6 @@ def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_fi
     sum_conf_matrix = sum_conf_matrix / 10.0
     sum_conf_matrix = np.flip(sum_conf_matrix)  # sklearn uses other confusion matrix format
     sum_conf_matrix = np.transpose(sum_conf_matrix)  # our table uses other confusion matrix format
-
-    # sum_conf_matrix = np.asarray([  # debugging
-    #     [1.00000, 1.01000, 1.02000, 1.03000, 1.04000, 1.05000, 1.06000],
-    #     [0.00000, 1.07000, 1.08000, 1.09000, 1.10000, 1.11000, 1.12000],
-    #     [0.01000, 0.02000, 1.13000, 1.14000, 1.15000, 1.16000, 1.17000],
-    #     [0.03000, 0.04000, 0.05000, 1.18000, 1.19000, 1.20000, 1.21000],
-    #     [0.06000, 0.07000, 0.08000, 0.09000, 1.22000, 1.23000, 1.24000],
-    #     [0.10000, 0.11000, 0.12000, 0.12000, 0.13000, 1.25000, 1.26000],
-    #     [0.14000, 0.15000, 0.16000, 0.17000, 0.18000, 0.19000, 1.27000]
-    # ])
 
     workbook = xlsxwriter.Workbook(result_file)
     worksheet = workbook.add_worksheet()
@@ -136,13 +126,6 @@ def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_fi
             xlsx_column = chr(ord(xlsx_column) + 1)
         xlsx_column = 'B'
         xlsx_line += 1
-
-    # result_mat = ""  # debugging
-    # for line in sum_conf_matrix:  # works fine
-    #     line = ' '.join([str(x) for x in line])
-    #     result_mat += line
-    #     result_mat += "\n"
-    # print(result_mat)
 
     workbook.close()
 
@@ -188,13 +171,13 @@ def main_evaluation(results_paths, learning):
     for path in results_paths:
         pre_name, dset_pkl = path.split(os.path.sep)[-2:]
         dset_name = dset_pkl.split(".")[0]
-        data_type = "grades" if "note" in dset_name else "categories"
+        data_type = get_data_type(dset_name)
 
-        if data_type == "grades":
-            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, "grades", pre_name, dset_name + ".xlsx")
+        if data_type == grades_type:
+            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, grades_type, pre_name, dset_name + ".xlsx")
             classes = classes_grades
         else:
-            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, "categories", pre_name, dset_name + ".xlsx")
+            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, categories_type, pre_name, dset_name + ".xlsx")
             classes = classes_categories
 
         if learning == "supervised":  # principle open-closed not respected below...
