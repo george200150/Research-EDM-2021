@@ -2,7 +2,7 @@ import os
 
 from sklearn.cluster import KMeans
 
-from research_edm.DATA.class_mapping import classes_grades, classes_categories
+from research_edm.DATA.class_mapping import classes_grades, classes_categories, unmap_category
 from research_edm.clustering.visualization import visualize_3d_clustering, generate_colors_per_class_7cls, \
     generate_colors_per_class_4cls
 from research_edm.configs.paths import dset_mean_stdev_dump_base, datasets_base_path, plot_dump_base, \
@@ -49,32 +49,37 @@ def cluster_dataset(dset, transform, normalisation):
     # dump_data([tsne_clustering, labels], tsne_dump_path)
     # paths.append(tsne_dump_path)
 
-    # kmeans_clustering = KMeans(n_clusters=no_cls).fit_transform(features)
+    plt_umap_gt = visualize_3d_clustering(umap_clustering, labels, title=title + " Ground Truth",
+                                          colors_per_class=color_scheme, savefig=True)
+    # umap_plot_path = os.path.join(plot_dump_base, transform.name, title + "_umap.png")
+    # plt_umap_gt.savefig(umap_plot_path, dpi=500)
+    plt_umap_gt.show()
+    #
+    plt_tsne_gt = visualize_3d_clustering(tsne_clustering, labels, title=title + " Ground Truth",
+                                          colors_per_class=color_scheme, savefig=True)
+    # tsne_plot_path = os.path.join(plot_dump_base, transform.name, title + "_tsne.png")
+    # plt_tsne_gt.savefig(tsne_plot_path, dpi=500)
+    plt_tsne_gt.show()
+
     kmeans_labels = KMeans(n_clusters=no_cls).fit_predict(features)
     # kmeans_dump_path = os.path.join(clustering_dump_base, transform.name, title + "_kmeans.pkl")
     # dump_data([kmeans_clustering, labels], kmeans_dump_path)
     # paths.append(kmeans_dump_path)
 
-    plt_umap = visualize_3d_clustering(umap_clustering, labels, title=title, colors_per_class=color_scheme, savefig=True)
-    umap_plot_path = os.path.join(plot_dump_base, transform.name, title + "_umap.png")
-    # plt_umap.savefig(umap_plot_path, dpi=500)
-    plt_umap.show()
-    #
-    plt_tsne = visualize_3d_clustering(tsne_clustering, labels, title=title + " Ground Truth", colors_per_class=color_scheme, savefig=True)
-    # tsne_plot_path = os.path.join(plot_dump_base, transform.name, title + "_tsne.png")
-    # plt_tsne.savefig(tsne_plot_path, dpi=500)
-    plt_tsne.show()
+    if get_data_type(dset_name) == grades_type:
+        kmeans_labels = list([str(x+4) for x in kmeans_labels])
+    else:
+        kmeans_labels = list([unmap_category(x + 4) for x in kmeans_labels])
 
-    plt_tsne = visualize_3d_clustering(tsne_clustering, [str(x+4) for x in kmeans_labels], title=title + " K-means", colors_per_class=color_scheme, savefig=True)
-    plt_tsne.show()
+    # UMAP clustering support for visualizing K-Means assigned labels
+    plt_umap_kmeans_labeled = visualize_3d_clustering(umap_clustering, kmeans_labels, title=title + " K-Means",
+                                                      colors_per_class=color_scheme, savefig=True)
+    plt_umap_kmeans_labeled.show()
 
-    plt_kmeans = visualize_3d_clustering(umap_clustering, labels, title=title + " Ground Truth", colors_per_class=color_scheme, savefig=True)
-    # kmeans_plot_path = os.path.join(plot_dump_base, transform.name, title + "_kmeans.png")
-    # plt_kmeans.savefig(kmeans_plot_path, dpi=500)
-    plt_kmeans.show()
-
-    plt_kmeans = visualize_3d_clustering(umap_clustering, [str(x+4) for x in kmeans_labels], title=title + " K-means", colors_per_class=color_scheme, savefig=True)
-    plt_kmeans.show()
+    # t-SNE clustering support for visualizing K-Means assigned labels
+    plt_tsne_kmeans_labeled = visualize_3d_clustering(tsne_clustering, kmeans_labels, title=title + " K-Means",
+                                                      colors_per_class=color_scheme, savefig=True)
+    plt_tsne_kmeans_labeled.show()
 
     return paths
 
