@@ -91,7 +91,7 @@ experiment:
     fresh_start: False
     savefig: True
     models:
-      active: ['umap']  # 't-sne
+      active: ['umap']  # 't-sne', 'umap'
       configs:
         umap:
           n_neighbors: 15,
@@ -131,6 +131,7 @@ experiment:
           dens_var_shift: 0.1,
           output_dens: False,
           disconnection_distance: null
+
         t-sne:
           n_components: 2
           perplexity: 15.0  # 30.0

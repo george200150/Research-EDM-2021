@@ -13,8 +13,19 @@ from research_edm.inference.model_instantiation import get_data_type, grades_typ
 from research_edm.io.pickle_io import get_mean_std, dump_data
 from research_edm.normalisation.postprocessing import identic, Wrap
 
-from umap import UMAP
-from sklearn.manifold import TSNE
+
+def plot_my_data(clusterings, color_scheme, dset_name, fresh_start, given_labels, savefig, title, transform,
+                 wrapped_models):
+    plts = [visualize_3d_clustering(clustering, given_labels, title=title, colors_per_class=color_scheme,
+                                    savefig=savefig) for clustering in clusterings]
+    plot_paths = [os.path.join(plot_dump_base, transform.name, dset_name + wrapped_model.png_name) for
+                  wrapped_model in wrapped_models]
+    if fresh_start:
+        for plot, path in zip(plts, plot_paths):
+            if savefig:
+                plot.savefig(path, dpi=500)
+            else:
+                plot.show()
 
 
 def cluster_dataset(dset, transform, normalisation, savefig, fresh_start, active_models, models_configs):
@@ -53,17 +64,8 @@ def cluster_dataset(dset, transform, normalisation, savefig, fresh_start, active
         wrapped_model.set_pkl_ending(transform, normalisation)
 
     clusterings = [wrapped_model.model.fit_transform(features) for wrapped_model in wrapped_models]
-    # plts_gt = [visualize_3d_clustering(clustering, labels, title=title + " Ground Truth",
-    #                                    colors_per_class=color_scheme, savefig=savefig) for clustering in clusterings]
-    # plot_paths = [os.path.join(plot_dump_base, transform.name, dset_name + wrapped_model.png_name) for wrapped_model in wrapped_models]
-    #
-    # if fresh_start:
-    #     for plot, path in zip(plts_gt, plot_paths):
-    #         if savefig:
-    #             plot.savefig(path, dpi=500)
-    #         else:
-    #             plot.show()
-    plot_my_data(clusterings, color_scheme, dset_name, fresh_start, labels, savefig, title, transform, wrapped_models)
+    plot_my_data(clusterings, color_scheme, dset_name, fresh_start, labels, savefig, title + " Ground Truth",
+                 transform, wrapped_models)
 
     kmeans_labels = KMeans(n_clusters=no_cls).fit_predict(features)
 
@@ -79,29 +81,14 @@ def cluster_dataset(dset, transform, normalisation, savefig, fresh_start, active
     else:
         kmeans_labels = list([unmap_category(x + 4) for x in kmeans_labels])
 
+    # now that the k-means labels have been introduced, we must change the models' png endings
     for wrapped_model in wrapped_models:
         wrapped_model.set_png_ending(kmeans=True)
 
-    plot_my_data(clusterings, color_scheme, dset_name, fresh_start, kmeans_labels, savefig, title, transform,
-                 wrapped_models)
+    plot_my_data(clusterings, color_scheme, dset_name, fresh_start, kmeans_labels, savefig, title + " K-Means",
+                 transform, wrapped_models)
 
     return paths
-
-
-def plot_my_data(clusterings, color_scheme, dset_name, fresh_start, kmeans_labels, savefig, title, transform,
-                 wrapped_models):
-    plts_kmeans = [visualize_3d_clustering(clustering, kmeans_labels, title=title + " K-Means",
-                                           colors_per_class=color_scheme, savefig=savefig) for clustering in
-                   clusterings]
-    plot_kmeans_paths = [os.path.join(plot_dump_base, transform.name, dset_name + wrapped_model.png_name) for
-                         wrapped_model in
-                         wrapped_models]
-    if fresh_start:
-        for plot, path in zip(plts_kmeans, plot_kmeans_paths):
-            if savefig:
-                plot.savefig(path, dpi=500)
-            else:
-                plot.show()
 
 
 def main_cluster(transform, normalisation, savefig, fresh_start, active_models, models_configs):
@@ -115,5 +102,5 @@ def main_cluster(transform, normalisation, savefig, fresh_start, active_models, 
 
 
 if __name__ == '__main__':
-    paths = main_cluster(Wrap(identic), True, False, None, None)
+    paths = main_cluster(Wrap(identic), True, False, False, None, None)
     print(paths)

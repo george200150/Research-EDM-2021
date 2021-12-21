@@ -11,76 +11,6 @@ from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_la
 
 
 def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_file):
-    r"""
-                \   Predicted class
-    Actual class|  P     N
-    P           | TP	FN
-    N           | FP	TN
-
-    sklearn documentation cited:
-        Thus in binary classification, the count of true negatives is
-        :math:`C_{0,0}`, false negatives is :math:`C_{1,0}`, true positives is
-        :math:`C_{1,1}` and false positives is :math:`C_{0,1}`.
-
-    confusion_matrix (DEFAULT from sci-kit learn):
-                    9 8 7 6 5 4 3 2 1
-                    predicted
-    9|-------------------------------|
-    8|  TN  /  /  /  /    /   /   /  |
-    7|       *  /  /   /   FP  /  /  |
-    6|           *   /   /   /   /   |
-    5|               * /   /  /   /  |   actual
-    4|                   *   /  /  / |
-    3|       FN              *   /   |
-    2|                           TP  |
-    1|-------------------------------|
-
-    cm' = np.flip(confusion_matrix):
-    1|-------------------------------|
-    2|  TP                           |
-    3| /  /  *             FN        |
-    4|  /   /  / *                   |
-    5|   /   /   /   *               |  actual
-    6|    /   /     /    *           |
-    7| /   / FP  /   /   /   *       |
-    8|  /   /  /   /  /   /  /  TN   |
-    9|-------------------------------|
-    predicted
-    1 2 3 4 5 6 7 8 9
-
-    np.flip(cm') => axes are swapped now; compatible with report table.
-
-    EXAMPLE:
-    Consider a matrix with its superior triangle having values greater than 1, that follow a pattern.
-
-    DEFAULT:
-    x =
-    1.00000,1.01000,1.02000,1.03000,1.04000,1.05000,1.06000
-    0.00000,1.07000,1.08000,1.09000,1.10000,1.11000,1.12000
-    0.01000,0.02000,1.13000,1.14000,1.15000,1.16000,1.17000
-    0.03000,0.04000,0.05000,1.18000,1.19000,1.20000,1.21000
-    0.06000,0.07000,0.08000,0.09000,1.22000,1.23000,1.24000
-    0.10000,0.11000,0.12000,0.12000,0.13000,1.25000,1.26000
-    0.14000,0.15000,0.16000,0.17000,0.18000,0.19000,1.27000
-
-    np.flip(x) =
-    1.27000,0.19000,0.18000,0.17000,0.16000,0.15000,0.14000
-    1.26000,1.25000,0.13000,0.12000,0.12000,0.11000,0.10000
-    1.24000,1.23000,1.22000,0.09000,0.08000,0.07000,0.06000
-    1.21000,1.20000,1.19000,1.18000,0.05000,0.04000,0.03000
-    1.17000,1.16000,1.15000,1.14000,1.13000,0.02000,0.01000
-    1.12000,1.11000,1.10000,1.09000,1.08000,1.07000,0.00000
-    1.06000,1.05000,1.04000,1.03000,1.02000,1.01000,1.00000
-
-    np.transpose(np.flip(x)) =
-    1.27000,1.26000,1.24000,1.21000,1.17000,1.12000,1.06000
-    0.19000,1.25000,1.23000,1.20000,1.16000,1.11000,1.05000
-    0.18000,0.13000,1.22000,1.19000,1.15000,1.10000,1.04000
-    0.17000,0.12000,0.09000,1.18000,1.14000,1.09000,1.03000
-    0.16000,0.12000,0.08000,0.05000,1.13000,1.08000,1.02000
-    0.15000,0.11000,0.07000,0.04000,0.02000,1.07000,1.01000
-    0.14000,0.10000,0.06000,0.03000,0.01000,0.00000,1.00000
-    """
     # evaluate 10-fold
     sum_conf_matrix = None
     for i in tqdm(range(0, 10), desc="k-fold evaluating..."):
@@ -146,10 +76,10 @@ def export_metrics_unsupervised(xs, preds, gts, result_file):
     worksheet.write("I1", "V-measure")
     worksheet.write("J1", "Calinski Harabasz Index")
 
-    worksheet.write("K1", "Prec")
-    # TODO: add Prec SACI & Prec ICVS
+    worksheet.write("K1", "Prec SACI")
+    worksheet.write("L1", "Prec ICVS")
 
-    worksheet.write("A" + str(2), silhouette__score(xs, gts))
+    worksheet.write("A" + str(2), silhouette__score(xs, gts))  # TODO: check if the formulas are correct
     worksheet.write("B" + str(2), rand_index(gts, preds))
     worksheet.write("C" + str(2), adjusted_rand_index(gts, preds))
     worksheet.write("D" + str(2), mutual_information(gts, preds))
@@ -160,9 +90,14 @@ def export_metrics_unsupervised(xs, preds, gts, result_file):
     worksheet.write("I" + str(2), v_measure(gts, preds))
     worksheet.write("J" + str(2), calinski_harabasz_index(xs, gts))
 
-    dict_labels = convert_label_list_to_dict_mapping(xs, gts)
-    prec = Prec(xs, dict_labels)
-    worksheet.write("K" + str(2), prec)
+    # dict_labels = convert_label_list_to_dict_mapping(xs, gts)
+    # prec = Prec(xs, dict_labels)
+    tau = 1  # 0, 1
+    k = 3  # 1, 3, 5
+    prec_saci = Prec_SACI(xs, gts, tau, k)
+    # prec_icvs = Prec_ICVS(xs, gts)
+    worksheet.write("K" + str(2), prec_saci)
+    # worksheet.write("L" + str(2), prec_icvs)
 
     workbook.close()
 
@@ -193,7 +128,8 @@ def main_evaluation(results_paths, learning):
 
 
 if __name__ == '__main__':
-    base_path = 'C:\\Users\\George\\PycharmProjects\\research_edm\\research_edm\\inference\\trained_classifiers\\'
+    # base_path = 'C:\\Users\\George\\PycharmProjects\\Research-EDM-2021\\research_edm\\inference\\trained_classifiers\\'
+    base_path = 'C:\\Users\\George\\PycharmProjects\\Research-EDM-2021\\research_edm\\clustering\\clustering_dump\\'
 
     # REGRESSION
     # paths = [[os.path.join(base_path, 'grades\\identic\\En_plf_2019-2020_note_norm_identic_poly.pkl')],
@@ -206,15 +142,24 @@ if __name__ == '__main__':
     #          [os.path.join(base_path, 'categories\\identic\\plf_2020-2021_(online)_categorii_norm_identic_poly.pkl')]]
 
     # NON-NORMALISED
-    paths = [[os.path.join(base_path, 'grades\\identic\\En_plf_2019-2020_note_identic_mlp.pkl')],
-             [os.path.join(base_path, 'grades\\identic\\En_plf_2020-2021_(online)_note_identic_mlp.pkl')],
-             [os.path.join(base_path, 'grades\\identic\\plf_2019-2020_note_identic_mlp.pkl')],
-             [os.path.join(base_path, 'grades\\identic\\plf_2020-2021_(online)_note_identic_mlp.pkl')],
-             [os.path.join(base_path, 'categories\\identic\\En_plf_2019-2020_categorii_identic_mlp.pkl')],
-             [os.path.join(base_path, 'categories\\identic\\En_plf_2020-2021_(online)_categorii_identic_mlp.pkl')],
-             [os.path.join(base_path, 'categories\\identic\\plf_2019-2020_categorii_identic_mlp.pkl')],
-             [os.path.join(base_path, 'categories\\identic\\plf_2020-2021_(online)_categorii_identic_mlp.pkl')]]
+    # paths = [[os.path.join(base_path, 'grades\\identic\\En_plf_2019-2020_note_identic_mlp.pkl')],
+    #          [os.path.join(base_path, 'grades\\identic\\En_plf_2020-2021_(online)_note_identic_mlp.pkl')],
+    #          [os.path.join(base_path, 'grades\\identic\\plf_2019-2020_note_identic_mlp.pkl')],
+    #          [os.path.join(base_path, 'grades\\identic\\plf_2020-2021_(online)_note_identic_mlp.pkl')],
+    #          [os.path.join(base_path, 'categories\\identic\\En_plf_2019-2020_categorii_identic_mlp.pkl')],
+    #          [os.path.join(base_path, 'categories\\identic\\En_plf_2020-2021_(online)_categorii_identic_mlp.pkl')],
+    #          [os.path.join(base_path, 'categories\\identic\\plf_2019-2020_categorii_identic_mlp.pkl')],
+    #          [os.path.join(base_path, 'categories\\identic\\plf_2020-2021_(online)_categorii_identic_mlp.pkl')]]
+
+    paths = [[os.path.join(base_path, 'identic\\En_plf_2019-2020_note_norm_identic_umap.pkl')],
+             [os.path.join(base_path, 'identic\\En_plf_2020-2021_(online)_note_norm_identic_umap.pkl')],
+             [os.path.join(base_path, 'identic\\plf_2019-2020_note_norm_identic_umap.pkl')],
+             [os.path.join(base_path, 'identic\\plf_2020-2021_(online)_note_norm_identic_umap.pkl')],
+             [os.path.join(base_path, 'identic\\En_plf_2019-2020_categorii_norm_identic_umap.pkl')],
+             [os.path.join(base_path, 'identic\\En_plf_2020-2021_(online)_categorii_norm_identic_umap.pkl')],
+             [os.path.join(base_path, 'identic\\plf_2019-2020_categorii_norm_identic_umap.pkl')],
+             [os.path.join(base_path, 'identic\\plf_2020-2021_(online)_categorii_norm_identic_umap.pkl')]]
 
     for paths_to_models in paths:
-        # main_evaluation([os.path.join(base_path, x) for x in pair], "unsupervised")
-        main_evaluation(paths_to_models, "supervised")
+        main_evaluation(paths_to_models, "unsupervised")
+        # main_evaluation(paths_to_models, "supervised")
