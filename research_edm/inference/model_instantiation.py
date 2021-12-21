@@ -12,14 +12,7 @@ from sklearn.manifold import TSNE
 
 cls_task = "classification"
 reg_task = "regression"
-
-grades_type = "grades"
-categories_type = "categories"
-
-
-def get_data_type(dset_name):
-    data_type = grades_type if "note" in dset_name else categories_type
-    return data_type
+clustering_tasks = "clustering"
 
 
 class ModelWrapper:
@@ -106,7 +99,7 @@ def parse_cluster_params(models_configs, active_models):
         dens_var_shift=umap_config['dens_var_shift'],
         output_dens=umap_config['output_dens'],
         disconnection_distance=umap_config['disconnection_distance'])
-    models.append(ModelWrapper(umap, 'umap', cls_task))
+    models.append(ModelWrapper(umap, 'umap', clustering_tasks))
 
     tsne = TSNE(
         n_components=tnse_config[''],
@@ -124,7 +117,7 @@ def parse_cluster_params(models_configs, active_models):
         angle=tnse_config[''],
         n_jobs=tnse_config[''],
         square_distances=tnse_config[''])
-    models.append(ModelWrapper(tsne, 't-sne', cls_task))
+    models.append(ModelWrapper(tsne, 't-sne', clustering_tasks))
 
     return get_active_models(models, active_models)
 

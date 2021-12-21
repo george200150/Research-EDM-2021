@@ -2,11 +2,12 @@ import os
 import xlsxwriter
 from tqdm import tqdm
 
-from research_edm.DATA.class_mapping import unmap_category, classes_grades, classes_categories
+from research_edm.DATA.class_mapping import unmap_category, classes_grades, classes_categories, categories_type, \
+    get_data_type, grades_type, get_data_type_of_dataset, map_category
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
-from research_edm.inference.model_instantiation import cls_task, get_data_type, categories_type, grades_type
+from research_edm.inference.model_instantiation import cls_task
 from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping
 
 
@@ -61,6 +62,12 @@ def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_fi
 
 
 def export_metrics_unsupervised(xs, preds, gts, result_file):
+    # convert labels to integers (order relationship is better defined)
+    if get_data_type_of_dataset(gts) == grades_type:
+        gts = list([int(y) for y in gts])
+    else:
+        gts = list([map_category(y) for y in gts])
+
     workbook = xlsxwriter.Workbook(result_file)
     worksheet = workbook.add_worksheet()
 
@@ -79,25 +86,38 @@ def export_metrics_unsupervised(xs, preds, gts, result_file):
     worksheet.write("K1", "Prec SACI")
     worksheet.write("L1", "Prec ICVS")
 
-    worksheet.write("A" + str(2), silhouette__score(xs, gts))  # TODO: check if the formulas are correct
-    worksheet.write("B" + str(2), rand_index(gts, preds))
-    worksheet.write("C" + str(2), adjusted_rand_index(gts, preds))
-    worksheet.write("D" + str(2), mutual_information(gts, preds))
-    worksheet.write("E" + str(2), davies_bouldin_index(xs, gts))
-    worksheet.write("F" + str(2), fowlkes_mallows__score(gts, preds))
-    worksheet.write("G" + str(2), homogeneity(gts, preds))
-    worksheet.write("H" + str(2), completeness(gts, preds))
-    worksheet.write("I" + str(2), v_measure(gts, preds))
-    worksheet.write("J" + str(2), calinski_harabasz_index(xs, gts))
-
-    # dict_labels = convert_label_list_to_dict_mapping(xs, gts)
-    # prec = Prec(xs, dict_labels)
     tau = 1  # 0, 1
     k = 3  # 1, 3, 5
-    prec_saci = Prec_SACI(xs, gts, tau, k)
-    # prec_icvs = Prec_ICVS(xs, gts)
-    worksheet.write("K" + str(2), prec_saci)
-    # worksheet.write("L" + str(2), prec_icvs)
+
+    # this row in the table uses the gts instead of the preds
+    worksheet.write("A" + str(2), silhouette__score(xs, gts))
+    # 1 always
+    # 1 always
+    worksheet.write("D" + str(2), mutual_information(gts, gts))
+    worksheet.write("E" + str(2), davies_bouldin_index(xs, gts))
+    # 1 always
+    # 1 always
+    # 1 always
+    # 1 always
+    worksheet.write("J" + str(2), calinski_harabasz_index(xs, gts))
+    worksheet.write("K" + str(2), Prec_SACI(xs, gts, tau, k))
+    worksheet.write("L" + str(2), Prec_ICVS(xs, gts))
+    worksheet.write("N" + str(2), "Metrics using ground truths instead of preds")
+
+    # this row in the table uses the parameters the formulas expect
+    worksheet.write("A" + str(3), silhouette__score(xs, preds))
+    worksheet.write("B" + str(3), rand_index(gts, preds))
+    worksheet.write("C" + str(3), adjusted_rand_index(gts, preds))
+    worksheet.write("D" + str(3), mutual_information(gts, preds))
+    worksheet.write("E" + str(3), davies_bouldin_index(xs, preds))
+    worksheet.write("F" + str(3), fowlkes_mallows__score(gts, preds))
+    worksheet.write("G" + str(3), homogeneity(gts, preds))
+    worksheet.write("H" + str(3), completeness(gts, preds))
+    worksheet.write("I" + str(3), v_measure(gts, preds))
+    worksheet.write("J" + str(3), calinski_harabasz_index(xs, preds))
+    worksheet.write("K" + str(3), Prec_SACI(xs, preds, tau, k))
+    worksheet.write("L" + str(3), Prec_ICVS(xs, preds))
+    worksheet.write("N" + str(3), "Real value of metrics")
 
     workbook.close()
 

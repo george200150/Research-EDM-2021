@@ -2,14 +2,14 @@ import os
 
 from sklearn.cluster import KMeans
 
-from research_edm.DATA.class_mapping import classes_grades, classes_categories, unmap_category
+from research_edm.DATA.class_mapping import classes_grades, classes_categories, unmap_category, get_data_type, \
+    grades_type
 from research_edm.clustering.visualization import visualize_3d_clustering, generate_colors_per_class_7cls, \
     generate_colors_per_class_4cls
 from research_edm.configs.paths import dset_mean_stdev_dump_base, datasets_base_path, plot_dump_base, \
     dataset_listings_path, clustering_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
-from research_edm.inference.model_instantiation import get_data_type, grades_type, parse_cluster_params, \
-    instantiate_clustering_dryrun
+from research_edm.inference.model_instantiation import parse_cluster_params, instantiate_clustering_dryrun
 from research_edm.io.pickle_io import get_mean_std, dump_data
 from research_edm.normalisation.postprocessing import identic, Wrap
 

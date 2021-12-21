@@ -4,6 +4,9 @@ from sklearn.metrics import silhouette_score, rand_score, adjusted_mutual_info_s
 
 import numpy as np
 
+from research_edm.evaluation.Prec_ICVS import loss_metric
+from research_edm.evaluation.Prec_SACI import edm_loss
+
 """
 Considered metrics:
     - Silhouette Score
@@ -228,71 +231,5 @@ def calcDunnIndex(points, cluster):
 # 	Silhouette Coefficient, Calinski-Harabasz Index, Davies-Bouldin Index etc.
 
 
-# TODO: thinking about this...
-# def is_same_point(a, b):
-#     if len(a) != len(b):
-#         raise ValueError("FATAL! SIZE MISMATCH!")
-#     for e1, e2 in zip(a, b):
-#         if e1 != e2:
-#             return False
-#     return True
-
-
-def delta_saci(a, b, tau):
-    return 1 if abs(a - b) <= tau else 0
-
-
-def w_saci(a, b):
-    return abs(a - b) / 10
-
-
-def label_saci(pair):  # label(y) == f(y) its final examination
-    return pair[-1]
-
-
-def prec_saci(pair, neighk_x, k, tau):
-    s_nom = 0
-    s_denom = k  # nominator / k +
-    for x in neighk_x:  # for each x of Nk (as formula says)
-        s_nom += delta_saci(label_saci(x), label_saci(pair), tau)
-        s_denom += w_saci(label_saci(x), label_saci(pair))
-    return s_nom / s_denom
-
-
-def euclidean_distance(a, b):
-    return np.linalg.norm(a - b)
-
-
-def knn_total(pairs):
-    n = len(pairs)
-    matrix_distances = np.zeros(shape=(n, n))
-    for i, pair1 in enumerate(pairs):
-        for j, pair2 in enumerate(pairs):
-            if j > i:
-                d = euclidean_distance(pair1[:-1], pair2[:-1])
-                matrix_distances[i][j] = d
-                matrix_distances[j][i] = d
-    closest_indices = np.argsort(matrix_distances, axis=1)
-    return closest_indices
-
-
-def knn_by_point(knn_matrix, k, n_th_x):
-    # column having index == 0 represents the distance from self to self (but not always....)
-    for indx, self_point in enumerate(knn_matrix[:, 0]):
-        if self_point != indx:
-            knn_matrix[indx, 0], knn_matrix[indx, 1] = knn_matrix[indx, 1], knn_matrix[indx, 0]
-            # put self in the right place (col 0)
-    knns_of_all_xs = knn_matrix[:, 1:k+1]
-    return knns_of_all_xs[n_th_x]
-
-
-def Prec_SACI(xs, ys, tau, k):
-    data = np.array([[x[0][0], x[0][1], x[1]] for x in list(zip(xs, ys))])  # nd_array of (x1, x2, y)
-    neighk_x_matrix = knn_total(data)  # adiacence matrix
-
-    loss = 0
-    for indx, pair in enumerate(data):  # for each y in D (as formula says)
-        indx = knn_by_point(neighk_x_matrix, k, indx)
-        loss += prec_saci(pair, data[indx], k, tau)
-
-    return loss / len(data)
+Prec_SACI = edm_loss
+Prec_ICVS = loss_metric

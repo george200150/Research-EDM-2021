@@ -2,8 +2,8 @@ import os
 import numpy as np
 from tqdm import tqdm
 
+from research_edm.DATA.class_mapping import get_data_type
 from research_edm.dataloader.feature_extractor import get_features_labels
-from research_edm.inference.model_instantiation import get_data_type
 from research_edm.io.pickle_io import dump_data, get_mask
 from research_edm.normalisation.postprocessing import Wrap, identic
 from research_edm.configs.paths import datasets_base_path, mask_dump_base, dataset_listings_path
