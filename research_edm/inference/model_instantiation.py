@@ -102,21 +102,21 @@ def parse_cluster_params(models_configs, active_models):
     models.append(ModelWrapper(umap, 'umap', clustering_tasks))
 
     tsne = TSNE(
-        n_components=tnse_config[''],
-        perplexity=tnse_config[''],
-        early_exaggeration=tnse_config[''],
-        learning_rate=tnse_config[''],
-        n_iter=tnse_config[''],
-        n_iter_without_progress=tnse_config[''],
-        min_grad_norm=tnse_config[''],
-        metric=tnse_config[''],
-        init=tnse_config[''],
-        verbose=tnse_config[''],
-        random_state=tnse_config[''],
-        method=tnse_config[''],
-        angle=tnse_config[''],
-        n_jobs=tnse_config[''],
-        square_distances=tnse_config[''])
+        n_components=tnse_config['n_components'],
+        perplexity=tnse_config['perplexity'],
+        early_exaggeration=tnse_config['early_exaggeration'],
+        learning_rate=tnse_config['learning_rate'],
+        n_iter=tnse_config['n_iter'],
+        n_iter_without_progress=tnse_config['n_iter_without_progress'],
+        min_grad_norm=float(tnse_config['min_grad_norm']),
+        metric=tnse_config['metric'],
+        init=tnse_config['init'],
+        verbose=tnse_config['verbose'],
+        random_state=tnse_config['random_state'],
+        method=tnse_config['method'],
+        angle=tnse_config['angle'],
+        n_jobs=tnse_config['n_jobs'],
+        square_distances=tnse_config['square_distances'])
     models.append(ModelWrapper(tsne, 't-sne', clustering_tasks))
 
     return get_active_models(models, active_models)

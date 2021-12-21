@@ -24,6 +24,7 @@ def main_pipeline_unsupervised(preprocessings, normalisation, savefig,
                                fresh_start, active_unsupervised_models, unsupervised_models_configs):
     fix_random_seeds()
 
+    preprocessings = map_preproc_str_to_function(preprocessings)
     wrap_preprocs = [Wrap(x) for x in preprocessings]
     for fun in wrap_preprocs:
         results_paths = main_cluster(fun, normalisation, savefig,
@@ -108,7 +109,7 @@ def read_parsed_yml():
     experiment_unsupervised = experiment['unsupervised']
     fresh_start = experiment_unsupervised['fresh_start']
     savefig = experiment_unsupervised['savefig']
-    unsupervised_models = experiment_supervised['models']
+    unsupervised_models = experiment_unsupervised['models']
     active_unsupervised_models = unsupervised_models['active']
     unsupervised_models_configs = unsupervised_models['configs']
 
