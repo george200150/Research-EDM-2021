@@ -8,7 +8,8 @@ from research_edm.clustering.visualization import visualize_3d_clustering, gener
 from research_edm.configs.paths import dset_mean_stdev_dump_base, datasets_base_path, plot_dump_base, \
     dataset_listings_path, clustering_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
-from research_edm.inference.model_instantiation import get_data_type, grades_type
+from research_edm.inference.model_instantiation import get_data_type, grades_type, parse_cluster_params, \
+    instantiate_clustering_dryrun
 from research_edm.io.pickle_io import get_mean_std, dump_data
 from research_edm.normalisation.postprocessing import identic, Wrap
 
@@ -16,7 +17,7 @@ from umap import UMAP
 from sklearn.manifold import TSNE
 
 
-def cluster_dataset(dset, transform, normalisation, fresh_start):
+def cluster_dataset(dset, transform, normalisation, fresh_start, active_models, models_configs):
     dset_name = dset.split("/")[-1].split(".")[0]
     mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
     if get_data_type(dset) == grades_type:
@@ -39,9 +40,24 @@ def cluster_dataset(dset, transform, normalisation, fresh_start):
     paths = []
 
     title = dset_name + "_" + transform.name
-    umap_clustering = UMAP(n_components=2).fit_transform(features)
 
-    tsne_clustering = TSNE(n_components=2, perplexity=15, early_exaggeration=10.0, learning_rate=150, n_iter=2000).fit_transform(features)
+    # instantiate the models
+    if active_models is None or len(active_models) == 0:
+        wrapped_models = instantiate_clustering_dryrun()
+    else:
+        wrapped_models = parse_cluster_params(models_configs, active_models)
+
+    umap_model = None
+    tsne_model = None
+
+    for wrapped_model in wrapped_models:  # TODO: not NPE safe
+        if wrapped_model.name == "umap":
+            umap_model = wrapped_model.model
+        elif wrapped_model.name == "t-sne":
+            tsne_model = wrapped_model.model
+
+    umap_clustering = umap_model.fit_transform(features)
+    tsne_clustering = tsne_model.fit_transform(features)
 
     plt_umap_gt = visualize_3d_clustering(umap_clustering, labels, title=title + " Ground Truth",
                                           colors_per_class=color_scheme, savefig=True)
@@ -92,16 +108,16 @@ def cluster_dataset(dset, transform, normalisation, fresh_start):
     return paths
 
 
-def main_cluster(transform, normalisation, fresh_start):
+def main_cluster(transform, normalisation, fresh_start, active_models, models_configs):
     ds_fd = open(dataset_listings_path, "r")
     datasets = [x.strip() for x in ds_fd.readlines()]
 
     paths = []
     for dataset in datasets:
-        paths += cluster_dataset(dataset, transform, normalisation, fresh_start)
+        paths += cluster_dataset(dataset, transform, normalisation, fresh_start, active_models, models_configs)
     return paths
 
 
 if __name__ == '__main__':
-    paths = main_cluster(Wrap(identic), True, False)
+    paths = main_cluster(Wrap(identic), True, False, None, None)
     print(paths)

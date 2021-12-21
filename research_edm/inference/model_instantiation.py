@@ -6,6 +6,9 @@ from sklearn.linear_model import LogisticRegression, SGDRegressor, TweedieRegres
 from sklearn.naive_bayes import CategoricalNB
 from sklearn.neural_network import MLPClassifier
 
+from umap import UMAP
+from sklearn.manifold import TSNE
+
 
 cls_task = "classification"
 reg_task = "regression"
@@ -42,9 +45,81 @@ def get_active_models(wrapped_models, active_models):
     return active_wrapped_models
 
 
+def instantiate_clustering_dryrun():
+    umap = UMAP(n_components=2)
+    return [ModelWrapper(umap, 'umap', cls_task)]
+
+
 def instantiate_default_dryrun():
     mlp = MLPClassifier(max_iter=5)
-    return ModelWrapper(mlp, 'mlp', cls_task)
+    return [ModelWrapper(mlp, 'mlp', cls_task)]
+
+
+def parse_cluster_params(models_configs, active_models):
+    umap_config = models_configs['umap']
+    tnse_config = models_configs['t-sne']
+
+    models = []
+
+    umap = UMAP(
+        n_neighbors=umap_config['n_neighbors'],
+        n_components=umap_config['n_components'],
+        metric=umap_config['metric'],
+        metric_kwds=umap_config['metric_kwds'],
+        output_metric=umap_config['output_metric'],
+        output_metric_kwds=umap_config['output_metric_kwds'],
+        n_epochs=umap_config['n_epochs'],
+        learning_rate=umap_config['learning_rate'],
+        init=umap_config['init'],
+        min_dist=umap_config['min_dist'],
+        spread=umap_config['spread'],
+        low_memory=umap_config['low_memory'],
+        n_jobs=umap_config['n_jobs'],
+        set_op_mix_ratio=umap_config['set_op_mix_ratio'],
+        local_connectivity=umap_config['local_connectivity'],
+        repulsion_strength=umap_config['repulsion_strength'],
+        negative_sample_rate=umap_config['negative_sample_rate'],
+        transform_queue_size=umap_config['transform_queue_size'],
+        a=umap_config['a'],
+        b=umap_config['b'],
+        random_state=umap_config['random_state'],
+        angular_rp_forest=umap_config['angular_rp_forest'],
+        target_n_neighbors=umap_config['target_n_neighbors'],
+        target_metric=umap_config['target_metric'],
+        target_metric_kwds=umap_config['target_metric_kwds'],
+        target_weight=umap_config['target_weight'],
+        transform_seed=umap_config['transform_seed'],
+        transform_mode=umap_config['transform_mode'],
+        force_approximation_algorithm=umap_config['force_approximation_algorithm'],
+        verbose=umap_config['verbose'],
+        unique=umap_config['unique'],
+        densmap=umap_config['densmap'],
+        dens_lambda=umap_config['dens_lambda'],
+        dens_frac=umap_config['dens_frac'],
+        dens_var_shift=umap_config['dens_var_shift'],
+        output_dens=umap_config['output_dens'],
+        disconnection_distance=umap_config['disconnection_distance'])
+    models.append(ModelWrapper(umap, 'umap', cls_task))
+
+    tsne = TSNE(
+        n_components=tnse_config[''],
+        perplexity=tnse_config[''],
+        early_exaggeration=tnse_config[''],
+        learning_rate=tnse_config[''],
+        n_iter=tnse_config[''],
+        n_iter_without_progress=tnse_config[''],
+        min_grad_norm=tnse_config[''],
+        metric=tnse_config[''],
+        init=tnse_config[''],
+        verbose=tnse_config[''],
+        random_state=tnse_config[''],
+        method=tnse_config[''],
+        angle=tnse_config[''],
+        n_jobs=tnse_config[''],
+        square_distances=tnse_config[''])
+    models.append(ModelWrapper(tsne, 't-sne', cls_task))
+
+    return get_active_models(models, active_models)
 
 
 def parse_ctor_params(models_configs, active_models):

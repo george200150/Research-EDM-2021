@@ -20,12 +20,14 @@ def fix_random_seeds():
     np.random.seed(seed)
 
 
-def main_pipeline_unsupervised(preprocessings, normalisation, fresh_start):
+def main_pipeline_unsupervised(preprocessings, normalisation,
+                               fresh_start, active_unsupervised_models, unsupervised_models_configs):
     fix_random_seeds()
 
     wrap_preprocs = [Wrap(x) for x in preprocessings]
     for fun in wrap_preprocs:
-        results_paths = main_cluster(fun, normalisation, fresh_start)
+        results_paths = main_cluster(fun, normalisation,
+                                     fresh_start, active_unsupervised_models, unsupervised_models_configs)
         main_evaluation(results_paths, "unsupervised")
 
 
@@ -99,26 +101,32 @@ def read_parsed_yml():
     normalisation = experiment['normalisation']
 
     experiment_supervised = experiment['supervised']
-    models = experiment_supervised['models']
-    active_models = models['active']
-    models_configs = models['configs']
+    supervised_models = experiment_supervised['models']
+    active_supervised_models = supervised_models['active']
+    supervised_models_configs = supervised_models['configs']
 
     experiment_unsupervised = experiment['unsupervised']
     fresh_start = experiment_unsupervised['fresh_start']
+    unsupervised_models = experiment_supervised['models']
+    active_unsupervised_models = unsupervised_models['active']
+    unsupervised_models_configs = unsupervised_models['configs']
 
-    return preprocessings, normalisation, active_models, models_configs, fresh_start
+    return preprocessings, normalisation, active_supervised_models, supervised_models_configs,\
+           fresh_start, active_unsupervised_models, unsupervised_models_configs
 
 
 if __name__ == '__main__':
-    preprocessings, normalisation, active_models, models_configs, fresh_start = read_parsed_yml()
+    preprocessings, normalisation, active_supervised_models, supervised_models_configs,\
+    fresh_start, active_unsupervised_models, unsupervised_models_configs = read_parsed_yml()
 
-    # main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, active_models, models_configs)
+    # main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, active_supervised_models, models_configs)
     # creates randomly generated masks, that are consistent cross-experiment
 
-    # main_pipeline_supervised_TRAIN_OVERWRITE(preprocessings, normalisation, active_models, models_configs)
+    # main_pipeline_supervised_TRAIN_OVERWRITE(preprocessings, normalisation, active_supervised_models, supervised_models_configs)
     # uses previously generated files; overwrites data, labels and models
 
     # main_pipeline_supervised_ONLY_EVAL()
     # evaluates the already trained classifiers (double checking only)
 
-    main_pipeline_unsupervised(preprocessings, normalisation, fresh_start)  # TODO: active models; parameters from yaml
+    main_pipeline_unsupervised(preprocessings, normalisation,
+                               fresh_start, active_unsupervised_models, unsupervised_models_configs)
