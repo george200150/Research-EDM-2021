@@ -28,13 +28,20 @@ class ModelWrapper:
         self.task_type = task_type
         self.name = model_name
         self.complete_model_name = None
-        self.data_type = data_type  # grades / categories
+        self.png_name = None
+        self.data_type = data_type
 
     def set_pkl_ending(self, transform, norm_flag):
         formatted_name = "_" + self.name + ".pkl"
         added_transform_name = "_" + transform.name + formatted_name
         if norm_flag:
             self.complete_model_name = "_norm" + added_transform_name
+
+    def set_png_ending(self, kmeans=False):
+        formatted_name = "_" + self.name
+        if kmeans:
+            formatted_name = formatted_name + "_kmeans"
+        self.png_name = formatted_name + ".png"
 
     def set_trained_data_type(self, data_type):
         self.data_type = data_type

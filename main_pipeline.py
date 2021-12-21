@@ -20,13 +20,13 @@ def fix_random_seeds():
     np.random.seed(seed)
 
 
-def main_pipeline_unsupervised(preprocessings, normalisation,
+def main_pipeline_unsupervised(preprocessings, normalisation, savefig,
                                fresh_start, active_unsupervised_models, unsupervised_models_configs):
     fix_random_seeds()
 
     wrap_preprocs = [Wrap(x) for x in preprocessings]
     for fun in wrap_preprocs:
-        results_paths = main_cluster(fun, normalisation,
+        results_paths = main_cluster(fun, normalisation, savefig,
                                      fresh_start, active_unsupervised_models, unsupervised_models_configs)
         main_evaluation(results_paths, "unsupervised")
 
@@ -107,16 +107,17 @@ def read_parsed_yml():
 
     experiment_unsupervised = experiment['unsupervised']
     fresh_start = experiment_unsupervised['fresh_start']
+    savefig = experiment_unsupervised['savefig']
     unsupervised_models = experiment_supervised['models']
     active_unsupervised_models = unsupervised_models['active']
     unsupervised_models_configs = unsupervised_models['configs']
 
-    return preprocessings, normalisation, active_supervised_models, supervised_models_configs,\
+    return preprocessings, normalisation, active_supervised_models, supervised_models_configs, savefig,\
            fresh_start, active_unsupervised_models, unsupervised_models_configs
 
 
 if __name__ == '__main__':
-    preprocessings, normalisation, active_supervised_models, supervised_models_configs,\
+    preprocessings, normalisation, active_supervised_models, supervised_models_configs, savefig, \
     fresh_start, active_unsupervised_models, unsupervised_models_configs = read_parsed_yml()
 
     # main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, active_supervised_models, models_configs)
@@ -128,5 +129,5 @@ if __name__ == '__main__':
     # main_pipeline_supervised_ONLY_EVAL()
     # evaluates the already trained classifiers (double checking only)
 
-    main_pipeline_unsupervised(preprocessings, normalisation,
+    main_pipeline_unsupervised(preprocessings, normalisation, savefig,
                                fresh_start, active_unsupervised_models, unsupervised_models_configs)

@@ -89,6 +89,7 @@ experiment:
           degree: 3  # interaction_only=False, include_bias=True, order='C'
   unsupervised:
     fresh_start: False
+    savefig: True
     models:
       active: ['umap']  # 't-sne
       configs:

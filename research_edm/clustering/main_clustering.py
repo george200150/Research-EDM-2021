@@ -17,7 +17,7 @@ from umap import UMAP
 from sklearn.manifold import TSNE
 
 
-def cluster_dataset(dset, transform, normalisation, fresh_start, active_models, models_configs):
+def cluster_dataset(dset, transform, normalisation, savefig, fresh_start, active_models, models_configs):
     dset_name = dset.split("/")[-1].split(".")[0]
     mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
     if get_data_type(dset) == grades_type:
@@ -47,74 +47,70 @@ def cluster_dataset(dset, transform, normalisation, fresh_start, active_models, 
     else:
         wrapped_models = parse_cluster_params(models_configs, active_models)
 
-    umap_model = None
-    tsne_model = None
+    # initialize names for specific file extensions
+    for wrapped_model in wrapped_models:
+        wrapped_model.set_png_ending()
+        wrapped_model.set_pkl_ending(transform, normalisation)
 
-    for wrapped_model in wrapped_models:  # TODO: not NPE safe
-        if wrapped_model.name == "umap":
-            umap_model = wrapped_model.model
-        elif wrapped_model.name == "t-sne":
-            tsne_model = wrapped_model.model
+    clusterings = [wrapped_model.model.fit_transform(features) for wrapped_model in wrapped_models]
+    # plts_gt = [visualize_3d_clustering(clustering, labels, title=title + " Ground Truth",
+    #                                    colors_per_class=color_scheme, savefig=savefig) for clustering in clusterings]
+    # plot_paths = [os.path.join(plot_dump_base, transform.name, dset_name + wrapped_model.png_name) for wrapped_model in wrapped_models]
+    #
+    # if fresh_start:
+    #     for plot, path in zip(plts_gt, plot_paths):
+    #         if savefig:
+    #             plot.savefig(path, dpi=500)
+    #         else:
+    #             plot.show()
+    plot_my_data(clusterings, color_scheme, dset_name, fresh_start, labels, savefig, title, transform, wrapped_models)
 
-    umap_clustering = umap_model.fit_transform(features)
-    tsne_clustering = tsne_model.fit_transform(features)
-
-    plt_umap_gt = visualize_3d_clustering(umap_clustering, labels, title=title + " Ground Truth",
-                                          colors_per_class=color_scheme, savefig=True)
-    umap_plot_path = os.path.join(plot_dump_base, transform.name, title + "_umap.png")
-    if fresh_start:
-        plt_umap_gt.savefig(umap_plot_path, dpi=500)
-    # plt_umap_gt.show()
-
-    plt_tsne_gt = visualize_3d_clustering(tsne_clustering, labels, title=title + " Ground Truth",
-                                          colors_per_class=color_scheme, savefig=True)
-    tsne_plot_path = os.path.join(plot_dump_base, transform.name, title + "_tsne.png")
-    if fresh_start:
-        plt_tsne_gt.savefig(tsne_plot_path, dpi=500)
-    # plt_tsne_gt.show()
-
-    # predict the labels for the dataset via a K-Means clustering algorithm (dim. red. algos cannot do this)
     kmeans_labels = KMeans(n_clusters=no_cls).fit_predict(features)
 
-    umap_dump_path = os.path.join(clustering_dump_base, transform.name, title + "_umap.pkl")
-    dump_data([umap_clustering, kmeans_labels, labels], umap_dump_path)
-    paths.append(umap_dump_path)
+    dump_paths = [os.path.join(clustering_dump_base, transform.name, dset_name + wrapped_model.complete_model_name)
+                  for wrapped_model in wrapped_models]
 
-    tsne_dump_path = os.path.join(clustering_dump_base, transform.name, title + "_tnse.pkl")
-    dump_data([tsne_clustering, kmeans_labels, labels], tsne_dump_path)
-    paths.append(tsne_dump_path)
+    for clustering, dump_path in zip(clusterings, dump_paths):
+        dump_data([clustering, kmeans_labels, labels], dump_path)
+        paths.append(dump_path)
 
     if get_data_type(dset_name) == grades_type:
         kmeans_labels = list([str(x+4) for x in kmeans_labels])
     else:
         kmeans_labels = list([unmap_category(x + 4) for x in kmeans_labels])
 
-    # UMAP clustering support for visualizing K-Means assigned labels
-    plt_umap_kmeans_labeled = visualize_3d_clustering(umap_clustering, kmeans_labels, title=title + " K-Means",
-                                                      colors_per_class=color_scheme, savefig=True)
-    umap_kmeans_plot_path = os.path.join(plot_dump_base, transform.name, title + "_umap_kmeans.png")
-    if fresh_start:
-        plt_umap_kmeans_labeled.savefig(umap_kmeans_plot_path, dpi=500)
-    # plt_umap_kmeans_labeled.show()
+    for wrapped_model in wrapped_models:
+        wrapped_model.set_png_ending(kmeans=True)
 
-    # t-SNE clustering support for visualizing K-Means assigned labels
-    plt_tsne_kmeans_labeled = visualize_3d_clustering(tsne_clustering, kmeans_labels, title=title + " K-Means",
-                                                      colors_per_class=color_scheme, savefig=True)
-    tsne_kmeans_plot_path = os.path.join(plot_dump_base, transform.name, title + "_tsne_kmeans.png")
-    if fresh_start:
-        plt_tsne_kmeans_labeled.savefig(tsne_kmeans_plot_path, dpi=500)
-    # plt_tsne_kmeans_labeled.show()
+    plot_my_data(clusterings, color_scheme, dset_name, fresh_start, kmeans_labels, savefig, title, transform,
+                 wrapped_models)
 
     return paths
 
 
-def main_cluster(transform, normalisation, fresh_start, active_models, models_configs):
+def plot_my_data(clusterings, color_scheme, dset_name, fresh_start, kmeans_labels, savefig, title, transform,
+                 wrapped_models):
+    plts_kmeans = [visualize_3d_clustering(clustering, kmeans_labels, title=title + " K-Means",
+                                           colors_per_class=color_scheme, savefig=savefig) for clustering in
+                   clusterings]
+    plot_kmeans_paths = [os.path.join(plot_dump_base, transform.name, dset_name + wrapped_model.png_name) for
+                         wrapped_model in
+                         wrapped_models]
+    if fresh_start:
+        for plot, path in zip(plts_kmeans, plot_kmeans_paths):
+            if savefig:
+                plot.savefig(path, dpi=500)
+            else:
+                plot.show()
+
+
+def main_cluster(transform, normalisation, savefig, fresh_start, active_models, models_configs):
     ds_fd = open(dataset_listings_path, "r")
     datasets = [x.strip() for x in ds_fd.readlines()]
 
     paths = []
     for dataset in datasets:
-        paths += cluster_dataset(dataset, transform, normalisation, fresh_start, active_models, models_configs)
+        paths += cluster_dataset(dataset, transform, normalisation, savefig, fresh_start, active_models, models_configs)
     return paths
 
 
