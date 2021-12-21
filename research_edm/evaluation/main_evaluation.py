@@ -147,17 +147,17 @@ def export_metrics_unsupervised(xs, preds, gts, result_file):
     worksheet.write("J1", "Calinski Harabasz Index")
 
     worksheet.write("K1", "Prec")
+    # TODO: add Prec SACI & Prec ICVS
 
-    # TODO: HOW DO YOU GET THE PREDS ???
     worksheet.write("A" + str(2), silhouette__score(xs, gts))
-    # worksheet.write("B" + str(2), rand_index(gts, preds))
-    # worksheet.write("C" + str(2), adjusted_rand_index(gts, preds))
-    # worksheet.write("D" + str(2), mutual_information(gts, preds))
+    worksheet.write("B" + str(2), rand_index(gts, preds))
+    worksheet.write("C" + str(2), adjusted_rand_index(gts, preds))
+    worksheet.write("D" + str(2), mutual_information(gts, preds))
     worksheet.write("E" + str(2), davies_bouldin_index(xs, gts))
-    # worksheet.write("F" + str(2), fowlkes_mallows__score(gts, preds))
-    # worksheet.write("G" + str(2), homogeneity(gts, preds))
-    # worksheet.write("H" + str(2), completeness(gts, preds))
-    # worksheet.write("I" + str(2), v_measure(gts, preds))
+    worksheet.write("F" + str(2), fowlkes_mallows__score(gts, preds))
+    worksheet.write("G" + str(2), homogeneity(gts, preds))
+    worksheet.write("H" + str(2), completeness(gts, preds))
+    worksheet.write("I" + str(2), v_measure(gts, preds))
     worksheet.write("J" + str(2), calinski_harabasz_index(xs, gts))
 
     dict_labels = convert_label_list_to_dict_mapping(xs, gts)

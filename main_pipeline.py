@@ -20,13 +20,12 @@ def fix_random_seeds():
     np.random.seed(seed)
 
 
-def main_pipeline_unsupervised(normalisation):
+def main_pipeline_unsupervised(preprocessings, normalisation, fresh_start):
     fix_random_seeds()
 
-    preprocessings = [identic, asinh, log]
     wrap_preprocs = [Wrap(x) for x in preprocessings]
     for fun in wrap_preprocs:
-        results_paths = main_cluster(fun, normalisation)
+        results_paths = main_cluster(fun, normalisation, fresh_start)
         main_evaluation(results_paths, "unsupervised")
 
 
@@ -94,17 +93,24 @@ def parse_yml():
 def read_parsed_yml():
     yml_dict = parse_yml()
     print(yml_dict)
-    setup = yml_dict['experiment']
-    preprocessings = setup['preprocessings']
-    normalisation = setup['normalisation']
-    models = setup['models']
+
+    experiment = yml_dict['experiment']
+    preprocessings = experiment['preprocessings']
+    normalisation = experiment['normalisation']
+
+    experiment_supervised = experiment['supervised']
+    models = experiment_supervised['models']
     active_models = models['active']
     models_configs = models['configs']
-    return preprocessings, normalisation, active_models, models_configs
+
+    experiment_unsupervised = experiment['unsupervised']
+    fresh_start = experiment_unsupervised['fresh_start']
+
+    return preprocessings, normalisation, active_models, models_configs, fresh_start
 
 
 if __name__ == '__main__':
-    preprocessings, normalisation, active_models, models_configs = read_parsed_yml()
+    preprocessings, normalisation, active_models, models_configs, fresh_start = read_parsed_yml()
 
     # main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, active_models, models_configs)
     # creates randomly generated masks, that are consistent cross-experiment
@@ -115,4 +121,4 @@ if __name__ == '__main__':
     # main_pipeline_supervised_ONLY_EVAL()
     # evaluates the already trained classifiers (double checking only)
 
-    main_pipeline_unsupervised(normalisation)
+    main_pipeline_unsupervised(preprocessings, normalisation, fresh_start)  # TODO: active models; parameters from yaml

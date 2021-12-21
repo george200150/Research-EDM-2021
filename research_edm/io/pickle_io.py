@@ -10,11 +10,8 @@ def get_mean_std(data_pkl):
 
 def get_clustering(data_pkl):
     a_file = open(data_pkl, "rb")
-    points, labels = pickle.load(a_file)
+    points, preds, labels = pickle.load(a_file)
     a_file.close()
-    preds = None
-
-    # TODO: compute kNN ???
 
     return points, preds, labels
 
