@@ -2,10 +2,9 @@ import os
 
 from sklearn.cluster import KMeans
 
-from research_edm.DATA.class_mapping import classes_grades, classes_categories, unmap_category, get_data_type, \
-    grades_type
+from research_edm.DATA.class_mapping import unmap_category, get_data_type, grades_type
 from research_edm.clustering.visualization import visualize_3d_clustering, generate_colors_per_class_7cls, \
-    generate_colors_per_class_4cls
+    generate_colors_per_class_5cls, generate_colors_per_class_2cls
 from research_edm.configs.paths import dset_mean_stdev_dump_base, datasets_base_path, plot_dump_base, \
     dataset_listings_path, clustering_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
@@ -28,15 +27,20 @@ def plot_my_data(clusterings, color_scheme, dset_name, fresh_start, given_labels
                 plot.show()
 
 
-def cluster_dataset(dset, transform, normalisation, savefig, fresh_start, active_models, models_configs):
+def cluster_dataset(no_classes, dset, transform, normalisation, savefig, fresh_start, active_models, models_configs):
     dset_name = dset.split("/")[-1].split(".")[0]
     mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
-    if get_data_type(dset) == grades_type:
+    if no_classes == 7:  # grades
         color_scheme = generate_colors_per_class_7cls()
-        no_cls = len(classes_grades)
+        no_cls = no_classes
+    elif no_classes == 5:  # E V G S F
+        color_scheme = generate_colors_per_class_5cls()
+        no_cls = no_classes
+    elif no_classes == 2:  # P F
+        color_scheme = generate_colors_per_class_2cls()
+        no_cls = no_classes
     else:
-        color_scheme = generate_colors_per_class_4cls()
-        no_cls = len(classes_categories)
+        raise ValueError("No such class mapping!")
 
     mean, stdev = get_mean_std(os.path.join(dset_mean_stdev_dump_base, mean_stdev_pkl_name))
 
@@ -79,7 +83,7 @@ def cluster_dataset(dset, transform, normalisation, savefig, fresh_start, active
     if get_data_type(dset_name) == grades_type:
         kmeans_labels = list([str(x+4) for x in kmeans_labels])
     else:
-        kmeans_labels = list([unmap_category(x + 4) for x in kmeans_labels])
+        kmeans_labels = list([unmap_category(no_classes, x + 4) for x in kmeans_labels])
 
     # now that the k-means labels have been introduced, we must change the models' png endings
     for wrapped_model in wrapped_models:
@@ -91,16 +95,18 @@ def cluster_dataset(dset, transform, normalisation, savefig, fresh_start, active
     return paths
 
 
-def main_cluster(transform, normalisation, savefig, fresh_start, active_models, models_configs):
+def main_cluster(no_classes, transform, normalisation, savefig, fresh_start, active_models, models_configs):
     ds_fd = open(dataset_listings_path, "r")
     datasets = [x.strip() for x in ds_fd.readlines()]
 
     paths = []
     for dataset in datasets:
-        paths += cluster_dataset(dataset, transform, normalisation, savefig, fresh_start, active_models, models_configs)
+        paths += cluster_dataset(no_classes, dataset, transform, normalisation, savefig, fresh_start, active_models, models_configs)
     return paths
 
 
 if __name__ == '__main__':
-    paths = main_cluster(Wrap(identic), True, False, False, None, None)
+    paths = main_cluster(7, Wrap(identic), True, False, False, None, None)
+    # paths = main_cluster(5, Wrap(identic), True, False, False, None, None)
+    # paths = main_cluster(2, Wrap(identic), True, False, False, None, None)
     print(paths)

@@ -20,7 +20,7 @@ def fix_random_seeds():
     np.random.seed(seed)
 
 
-def main_pipeline_unsupervised(preprocessings, normalisation, savefig,
+def main_pipeline_unsupervised(no_classes, preprocessings, normalisation, savefig,
                                fresh_start, active_unsupervised_models, unsupervised_models_configs):
     fix_random_seeds()
 
@@ -29,10 +29,10 @@ def main_pipeline_unsupervised(preprocessings, normalisation, savefig,
     for fun in wrap_preprocs:
         results_paths = main_cluster(fun, normalisation, savefig,
                                      fresh_start, active_unsupervised_models, unsupervised_models_configs)
-        main_evaluation(results_paths, "unsupervised")
+        main_evaluation(no_classes, results_paths, "unsupervised")
 
 
-def main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, active_models, models_configs):
+def main_pipeline_supervised_FIRST_RUN_ONLY(no_classes, preprocessings, normalisation, active_models, models_configs):
     fix_random_seeds()
 
     main_norm()
@@ -43,11 +43,11 @@ def main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, activ
 
     wrap_preprocs = [Wrap(x) for x in preprocessings]
     for fun in wrap_preprocs:
-        results_paths = main_inference(active_models, models_configs, fun, norm_flag=normalisation)
+        results_paths = main_inference(no_classes, active_models, models_configs, fun, norm_flag=normalisation)
         dump_data(results_paths, os.path.join(results_paths_dump_base, paths_filename))
         # Momentan, este implementata doar varianta de normalizare (x - mean) / stdev.
         for paths_to_models in results_paths:
-            main_evaluation(paths_to_models, "supervised")
+            main_evaluation(no_classes, paths_to_models, "supervised")
 
 
 def map_preproc_str_to_function(preprocessings):
@@ -63,26 +63,26 @@ def map_preproc_str_to_function(preprocessings):
     return res
 
 
-def main_pipeline_supervised_TRAIN_OVERWRITE(preprocessings, normalisation, active_models, models_configs):
+def main_pipeline_supervised_TRAIN_OVERWRITE(no_classes, preprocessings, normalisation, active_models, models_configs):
     fix_random_seeds()
 
     preprocessings = map_preproc_str_to_function(preprocessings)
 
     wrap_preprocs = [Wrap(x) for x in preprocessings]
     for fun in wrap_preprocs:
-        results_paths = main_inference(active_models, models_configs, fun, norm_flag=normalisation)
+        results_paths = main_inference(no_classes, active_models, models_configs, fun, norm_flag=normalisation)
         dump_data(results_paths, os.path.join(results_paths_dump_base, paths_filename))
 
         for paths_to_models in results_paths:
-            main_evaluation(paths_to_models, "supervised")
+            main_evaluation(no_classes, paths_to_models, "supervised")
 
 
-def main_pipeline_supervised_ONLY_EVAL():
+def main_pipeline_supervised_ONLY_EVAL(no_classes):
     fix_random_seeds()
 
     results_paths = get_paths_list(os.path.join(results_paths_dump_base, paths_filename))
     for paths_to_models in results_paths:
-        main_evaluation(paths_to_models, "supervised")
+        main_evaluation(no_classes, paths_to_models, "supervised")
 
 
 def parse_yml():
@@ -98,6 +98,7 @@ def read_parsed_yml():
     print(yml_dict)
 
     experiment = yml_dict['experiment']
+    no_classes = experiment['no_classes']
     preprocessings = experiment['preprocessings']
     normalisation = experiment['normalisation']
 
@@ -113,21 +114,21 @@ def read_parsed_yml():
     active_unsupervised_models = unsupervised_models['active']
     unsupervised_models_configs = unsupervised_models['configs']
 
-    return preprocessings, normalisation, active_supervised_models, supervised_models_configs, savefig,\
+    return no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs, savefig,\
            fresh_start, active_unsupervised_models, unsupervised_models_configs
 
 
 if __name__ == '__main__':
-    preprocessings, normalisation, active_supervised_models, supervised_models_configs, savefig, \
+    no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs, savefig, \
     fresh_start, active_unsupervised_models, unsupervised_models_configs = read_parsed_yml()
 
-    # main_pipeline_supervised_FIRST_RUN_ONLY(preprocessings, normalisation, active_supervised_models, supervised_models_configs)
+    # main_pipeline_supervised_FIRST_RUN_ONLY(no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs)
     # creates randomly generated masks, that are consistent cross-experiment
 
-    # main_pipeline_supervised_TRAIN_OVERWRITE(preprocessings, normalisation, active_supervised_models, supervised_models_configs)
+    main_pipeline_supervised_TRAIN_OVERWRITE(no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs)
     # uses previously generated files; overwrites data, labels and models
 
-    main_pipeline_supervised_ONLY_EVAL()
+    # main_pipeline_supervised_ONLY_EVAL(no_classes)
     # evaluates the already trained classifiers (double checking only)
 
-    # main_pipeline_unsupervised(preprocessings, normalisation, savefig, fresh_start, active_unsupervised_models, unsupervised_models_configs)
+    # main_pipeline_unsupervised(no_classes, preprocessings, normalisation, savefig, fresh_start, active_unsupervised_models, unsupervised_models_configs)

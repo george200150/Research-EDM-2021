@@ -2,8 +2,9 @@ import os
 import xlsxwriter
 from tqdm import tqdm
 
-from research_edm.DATA.class_mapping import unmap_category, classes_grades, classes_categories, categories_type, \
-    get_data_type, grades_type, get_data_type_of_dataset, map_category
+from research_edm.DATA.class_mapping import unmap_category, classes_grades, categories_type, \
+    get_data_type, grades_type, get_data_type_of_dataset, map_category, classes_categories_7, classes_categories_5, \
+    classes_categories_2, post_proc_remap_2, post_proc_remap_5
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
@@ -49,7 +50,16 @@ def write_overall_accuracy(cmsc, cmsr, i, n, omsc, worksheet):
     # =C6/sum(C6:G6)
 
 
-def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_file):
+def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mapping, result_file):
+    if len(classes) == 7 or no_classes == 7:  # grades
+        classes_categories = classes_categories_7
+    elif no_classes == 5:  # E V G S F
+        classes_categories = classes_categories_5
+    elif no_classes == 2:  # P F
+        classes_categories = classes_categories_2
+    else:
+        raise ValueError("No such class mapping!")
+
     # evaluate 10-fold
     sum_conf_matrix = None
     for i in tqdm(range(0, 10), desc="k-fold evaluating..."):
@@ -58,14 +68,25 @@ def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_fi
 
         if wrapped_model.task_type == cls_task:
             gts = labels_mapping.inverse_transform(gts)
-            preds = labels_mapping.inverse_transform(preds)
+            preds = labels_mapping.inverse_transform(preds)  # TODO: check type
+            # post-process predictions
+            if len(classes) == 7:
+                pass
+            elif no_classes == 5:
+                preds = np.asarray([post_proc_remap_5[x] for x in preds])
+                gts = np.asarray([post_proc_remap_5[x] for x in gts])
+            elif no_classes == 2:
+                preds = np.asarray([post_proc_remap_2[x] for x in preds])
+                gts = np.asarray([post_proc_remap_2[x] for x in gts])
+            else:
+                raise ValueError("Cannot remap predictions!")
         else:
             if wrapped_model.data_type == categories_type:
-                preds = list([unmap_category(int(round(x))) for x in preds])
+                preds = list([unmap_category(no_classes, int(round(x))) for x in preds])
             else:
                 preds = list([str((int(round(x)))) for x in preds])
 
-        conf_matrix = get_confusion_matrix(gts, preds, classes)
+        conf_matrix = get_confusion_matrix(gts, preds, classes)  # TODO: still, please verify label order integrity...
         if sum_conf_matrix is None:
             sum_conf_matrix = conf_matrix
         else:
@@ -132,12 +153,12 @@ def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_fi
     workbook.close()
 
 
-def export_metrics_unsupervised(xs, preds, gts, result_file):
+def export_metrics_unsupervised(no_classes, xs, preds, gts, result_file):
     # convert labels to integers (order relationship is better defined)
-    if get_data_type_of_dataset(gts) == grades_type:
+    if get_data_type_of_dataset(no_classes, gts) == grades_type:
         gts = list([int(y) for y in gts])
     else:
-        gts = list([map_category(y) for y in gts])
+        gts = list([map_category(no_classes, y) for y in gts])
 
     workbook = xlsxwriter.Workbook(result_file)
     worksheet = workbook.add_worksheet()
@@ -193,18 +214,25 @@ def export_metrics_unsupervised(xs, preds, gts, result_file):
     workbook.close()
 
 
-def main_evaluation(results_paths, learning):
+def main_evaluation(no_classes, results_paths, learning):
     for path in results_paths:
         pre_name, dset_pkl = path.split(os.path.sep)[-2:]
         dset_name = dset_pkl.split(".")[0]
         data_type = get_data_type(dset_name)
 
         if data_type == grades_type:
-            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, grades_type, pre_name, dset_name + ".xlsx")
+            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, grades_type, pre_name, dset_name + str(no_classes) + ".xlsx")
             classes = classes_grades
         else:
-            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, categories_type, pre_name, dset_name + ".xlsx")
-            classes = classes_categories
+            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, categories_type, pre_name, dset_name + str(no_classes) + ".xlsx")
+            if no_classes == 2:
+                classes = classes_categories_2
+            elif no_classes == 5:
+                classes = classes_categories_5
+            elif no_classes == 7:
+                classes = classes_categories_7
+            else:
+                raise ValueError("No such class mapping!")
 
         if learning == "supervised":  # principle open-closed not respected below...
             for word in ["_asinh", "_identic", "_log", "_norm", "_mlp", "_nb", "_lr", "_sgdr", "_tr", "_poly"]:
@@ -212,10 +240,10 @@ def main_evaluation(results_paths, learning):
                     dset_name = "".join(dset_name.split(word))
             lb = get_labels_mapping(os.path.join(mapping_dump_base, data_type, dset_name + ".pkl"))
             ready_for_eval = get_ready_for_eval(path)
-            export_metrics_supervised(ready_for_eval, classes, lb, dump_xlsx_file)
+            export_metrics_supervised(no_classes, ready_for_eval, classes, lb, dump_xlsx_file)
         else:
             xs, preds, gts = get_clustering(path)
-            export_metrics_unsupervised(xs, preds, gts, dump_xlsx_file)
+            export_metrics_unsupervised(no_classes, xs, preds, gts, dump_xlsx_file)
 
 
 if __name__ == '__main__':
@@ -252,5 +280,7 @@ if __name__ == '__main__':
              [os.path.join(base_path, 'identic\\plf_2020-2021_(online)_categorii_norm_identic_umap.pkl')]]
 
     for paths_to_models in paths:
-        main_evaluation(paths_to_models, "unsupervised")
-        # main_evaluation(paths_to_models, "supervised")
+        main_evaluation(2, paths_to_models, "unsupervised")
+        # main_evaluation(5, paths_to_models, "unsupervised")
+        # main_evaluation(7, paths_to_models, "unsupervised")
+        # main_evaluation(7, paths_to_models, "supervised")

@@ -16,10 +16,17 @@ def generate_colors_per_class_7cls():
     return colors
 
 
-def generate_colors_per_class_4cls():
+def generate_colors_per_class_5cls():
     colors = {'E': [0, 0, 255],
+              'V': [0, 255, 255],
               'G': [0, 255, 0],
               'S': [255, 0, 255],
+              'F': [255, 0, 0]}
+    return colors
+
+
+def generate_colors_per_class_2cls():
+    colors = {'P': [0, 0, 255],
               'F': [255, 0, 0]}
     return colors
 

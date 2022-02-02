@@ -1,7 +1,7 @@
 import os
 
 from research_edm.clustering.visualization import visualize_3d_clustering, generate_colors_per_class_7cls, \
-    generate_colors_per_class_4cls
+    generate_colors_per_class_5cls, generate_colors_per_class_2cls
 from research_edm.configs.paths import dataset_listings_path, dset_mean_stdev_dump_base, datasets_base_path
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.io.pickle_io import get_mean_std
@@ -13,14 +13,15 @@ mpl.use('TkAgg')  # for plotting in separate window
 
 
 feature_names_per_class_7cls = []
-feature_names_per_class_4cls = []
+feature_names_per_class_5cls = []
+feature_names_per_class_2cls = []
 
 
 def select_features(features, indices):
     return features[:, indices]
 
 
-def main_visualization():
+def main_visualization(no_classes):
     ds_fd = open(dataset_listings_path, "r")
     datasets = [x.strip() for x in ds_fd.readlines()]
 
@@ -29,12 +30,17 @@ def main_visualization():
     norm_flag = False
 
     for dataset in datasets:
-        if "note" in dataset:  # grades
+        if no_classes == 7:  # grades
             color_scheme = generate_colors_per_class_7cls()
             feature_names = feature_names_per_class_7cls
+        elif no_classes == 5:  # E V G S F
+            color_scheme = generate_colors_per_class_5cls()
+            feature_names = feature_names_per_class_5cls
+        elif no_classes == 2:  # P F
+            color_scheme = generate_colors_per_class_2cls()
+            feature_names = feature_names_per_class_2cls
         else:
-            color_scheme = generate_colors_per_class_4cls()
-            feature_names = feature_names_per_class_4cls
+            raise ValueError("No such class mapping!")
 
         dset_name = dataset.split("/")[-1].split(".")[0]
         mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
@@ -62,4 +68,6 @@ def main_visualization():
 
 
 if __name__ == '__main__':
-    main_visualization()
+    main_visualization(7)
+    # main_visualization(5)
+    # main_visualization(2)
