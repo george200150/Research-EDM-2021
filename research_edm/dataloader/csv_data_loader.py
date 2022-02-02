@@ -1,4 +1,3 @@
-
 # In fisiere, la inceput e numarul de instante,
 # apoi pe al doilea rand numarul de atribute,
 # apoi instantele (pentru fiecare instanta la inceput e clasa si apoi valorile atributelor).
@@ -24,8 +23,8 @@ class CsvDataLoader:
                 ddict = {"label": d[0],
                          "features": [transform(x) for x in norm_data]}
             except Exception as e:
-                print(e)  # TODO: do not forget that logarithm is not defined on negative numbers !!!
-                print(norm_data)  # print(d)
+                print(e)  # Do not forget that logarithm is not defined on negative numbers !!!
+                print(norm_data)
             data_dicts.append(ddict)
         self.data = data_dicts
 

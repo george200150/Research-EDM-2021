@@ -7,8 +7,46 @@ from research_edm.DATA.class_mapping import unmap_category, classes_grades, clas
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
+from research_edm.evaluation.xslx_metrics import get_overall_accuracy, get_overall_non_acc_metric
 from research_edm.inference.model_instantiation import cls_task
 from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping
+
+
+def division_check(nom, denom):
+    return "=IF(" + denom + "," + nom + "/" + denom + ",0)"
+
+
+def compound_check(denom1, denom2):
+    return "=IF(" + denom1 + "*" + denom2 + ", 2/(1/" + denom1 + "+1/" + denom2 + "),0)"
+
+
+def write_weights(cmsc, cmsr, i, n, omsc, worksheet):
+    nom = "sum(" + chr(ord(cmsr) + i) + str(cmsc) + ":" + chr(ord(cmsr) + i) + str(cmsc + n - 1) + ")"
+    denom = "sum($" + chr(ord(cmsr)) + str(cmsc) + ":$" + chr(ord(cmsr) + n - 1) + str(cmsc + n - 1) + ")"
+    worksheet.write(chr(ord(cmsr) + i) + str(omsc + 4), division_check(nom, denom))
+    # =sum(C6: C10) / sum($C6:$G10)
+
+
+def write_overall_recall(cmsr, i, omsc, worksheet):
+    denom_1 = chr(ord(cmsr) + i) + str(omsc + 1)
+    denom_2 = chr(ord(cmsr) + i) + str(omsc + 2)
+    worksheet.write(chr(ord(cmsr) + i) + str(omsc + 3), compound_check(denom_1, denom_2))
+    # =2 / (1 / C14 + 1 / C15)
+
+
+def write_overall_prec(cmsc, cmsr, i, n, omsc, worksheet):
+    nom = chr(ord(cmsr) + i) + str(cmsc + i)
+    denom = "sum(" + chr(ord(cmsr) + i) + str(cmsc) + ":" + chr(ord(cmsr) + i) + str(cmsc + n - 1) + ")"
+    worksheet.write(chr(ord(cmsr) + i) + str(omsc + 2), division_check(nom, denom))
+    # =C6 / sum(C6: C10)
+
+
+def write_overall_accuracy(cmsc, cmsr, i, n, omsc, worksheet):
+    # cannot use chr(ord("9") + 1), because ASCII table does not have a "10"
+    nom = chr(ord(cmsr) + i) + str(cmsc + i)
+    denom = "sum(" + chr(ord(cmsr)) + str(cmsc + i) + ":" + chr(ord(cmsr) + n - 1) + str(cmsc + i) + ")"
+    worksheet.write(chr(ord(cmsr) + i) + str(omsc + 1), division_check(nom, denom))
+    # =C6/sum(C6:G6)
 
 
 def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_file):
@@ -33,30 +71,63 @@ def export_metrics_supervised(ready_for_eval, classes, labels_mapping, result_fi
         else:
             sum_conf_matrix += conf_matrix
 
-    sum_conf_matrix = sum_conf_matrix / 10.0
+    # sum_conf_matrix = sum_conf_matrix / 10.0
     sum_conf_matrix = np.flip(sum_conf_matrix)  # sklearn uses other confusion matrix format
     sum_conf_matrix = np.transpose(sum_conf_matrix)  # our table uses other confusion matrix format
 
     workbook = xlsxwriter.Workbook(result_file)
     worksheet = workbook.add_worksheet()
 
-    worksheet.write("A4", "predicted")
-    worksheet.write("C1", "actual")
+    worksheet.write("A4", "Predict")
+    worksheet.write("A5", "ed class")
 
-    worksheet.write("B1", "TP")
-    worksheet.write("A3", "TP")
+    worksheet.write("E1", "Actual class")
 
-    worksheet.write("A" + str(len(classes) + 2), "TN")
-    worksheet.write(chr(ord("A") + len(classes)) + "1", "TN")
+    conf_matrix_starting_row, conf_matrix_starting_column = "C", 3
+    cmsc = conf_matrix_starting_column
+    cmsr = conf_matrix_starting_row
 
-    xlsx_column = 'B'
-    xlsx_line = 3
+    for idx, categ in enumerate(classes_categories):
+        worksheet.write(chr(ord(cmsr) + idx) + str(cmsc-1), categ)
+        worksheet.write(chr(ord(cmsr)-1) + str(cmsc + idx), categ)
+
+    xlsx_column = cmsr
+    xlsx_line = cmsc
     for line in sum_conf_matrix:
         for cell in line:
-            worksheet.write(xlsx_column + str(xlsx_line), str(cell))
+            worksheet.write_number(xlsx_column + str(xlsx_line), cell)
             xlsx_column = chr(ord(xlsx_column) + 1)
-        xlsx_column = 'B'
+        xlsx_column = cmsr
         xlsx_line += 1
+
+    ####################################################################################################################
+
+    n = len(classes_categories)
+
+    overall_metrics_starting_row, overall_metrics_starting_column = "J", 13
+    omsc = overall_metrics_starting_column
+    omsr = overall_metrics_starting_row
+
+    worksheet.write("A" + str(omsc), "Acc")
+    worksheet.write("A" + str(omsc+1), "Prec")
+    worksheet.write("A" + str(omsc+2), "Recall")
+    worksheet.write("A" + str(omsc+3), "F-measure")
+    worksheet.write("A" + str(omsc+4), "Weight")
+
+    worksheet.write(chr(ord(omsr)) + str(omsc-1), "Overall/weigthed")
+    worksheet.write(chr(ord(omsr)) + str(omsc), get_overall_accuracy(cmsr, cmsc, n))
+
+    for i in range(0, n):
+        write_overall_accuracy(cmsc, cmsr, i, n, omsc, worksheet)
+        write_overall_prec(cmsc, cmsr, i, n, omsc, worksheet)
+        write_overall_recall(cmsr, i, omsc, worksheet)
+        write_weights(cmsc, cmsr, i, n, omsc, worksheet)
+
+        worksheet.write(chr(ord(omsr)) + str(omsc+1), get_overall_non_acc_metric(cmsr, omsc+1, n))
+        worksheet.write(chr(ord(omsr)) + str(omsc+2), get_overall_non_acc_metric(cmsr, omsc+1, n, offset=1))
+        worksheet.write(chr(ord(omsr)) + str(omsc+3), get_overall_non_acc_metric(cmsr, omsc+1, n, offset=2))
+
+    ####################################################################################################################
 
     workbook.close()
 

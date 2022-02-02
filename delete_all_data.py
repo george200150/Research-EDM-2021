@@ -1,9 +1,9 @@
 import os
 import glob
 
+from research_edm.DATA.class_mapping import categories_type, grades_type
 from research_edm.configs.paths import results_paths_dump_base, base_dump_xlxs, mapping_dump_base, \
     dset_mean_stdev_dump_base, inference_dump_base, mask_dump_base, supervised_results_dir
-from research_edm.inference.model_instantiation import grades_type, categories_type
 
 
 type_folders = [categories_type, grades_type]
