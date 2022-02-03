@@ -1,6 +1,3 @@
-# In fisiere, la inceput e numarul de instante,
-# apoi pe al doilea rand numarul de atribute,
-# apoi instantele (pentru fiecare instanta la inceput e clasa si apoi valorile atributelor).
 from research_edm.normalisation.postprocessing import Wrap, identic
 
 
@@ -8,9 +5,14 @@ class CsvDataLoader:
     def __init__(self, data_file, transform=Wrap(identic), mean=None, stdev=None, normalise=False, num_images=None):
         csv = open(data_file)
         lines = csv.readlines()
-        self.data_size = int(lines[0].strip())
-        self.no_cols = int(lines[1].strip())
-        data = [list(x.strip().split(",")) for x in lines[2:]]
+        # ###########################################old format#########################################################
+        # self.data_size = int(lines[0].strip())
+        # self.no_cols = int(lines[1].strip())
+        # data = [list(x.strip().split(",")) for x in lines[2:]]
+        # ###########################################new format#########################################################
+        self.data_size = len(lines) - 1
+        data = [list(x.strip().split(",")) for x in lines[1:]]
+        ################################################################################################################
         data_dicts = []
         for d in data:
             ddict = {}

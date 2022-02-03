@@ -13,7 +13,7 @@ def get_shuffle_mask(dset):
     dset_name = dset.split("/")[-1].split(".")[0]
     data_type = get_data_type(dset_name)
 
-    features, labels = get_features_labels(
+    _, labels = get_features_labels(
         data_file=os.path.join(datasets_base_path, dset),
         transform=Wrap(identic),
         mean=None,

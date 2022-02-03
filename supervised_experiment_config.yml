@@ -6,7 +6,8 @@ experiment:
     models:
 #      active: ['sgdr', 'tr', 'poly']  # 'mlp', 'nb', 'lr', 'sgdr', 'tr', 'poly'
 #      active: ['mlp']
-      active: ['sgdr', 'tr', 'poly']
+      active: ['poly']
+#      active: ['mlp', 'poly']
       configs:
         mlp:
           hidden_layer_sizes: (100,)
@@ -88,7 +89,7 @@ experiment:
           verbose: 0
 
         poly:
-          degree: 3  # interaction_only=False, include_bias=True, order='C'
+          degree: 5  # interaction_only=False, include_bias=True, order='C'
   unsupervised:
     fresh_start: False
     savefig: False

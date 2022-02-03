@@ -1,9 +1,11 @@
-classes_grades = ['4', '5', '6', '7', '8', '9', '10']
+# classes_grades = ['4', '5', '6', '7', '8', '9', '10']
+classes_grades = [4, 5, 6, 7, 8, 9, 10]
 
 classes_categories_2 = ["P", "F"]
 classes_categories_4 = ["E", "G", "S", "F"]  # previously used
 classes_categories_5 = ["E", "V", "G", "S", "F"]
-classes_categories_7 = ["10", "9", "8", "7", "6", "5", "4"]
+# classes_categories_7 = ["10", "9", "8", "7", "6", "5", "4"]
+classes_categories_7 = [10, 9, 8, 7, 6, 5, 4]
 
 
 mapping_2 = {"P": 10.0, "F": 1.0}
@@ -14,6 +16,7 @@ mapping_7 = {"E": 10.0, "V": 9.0, "G": 8.0, "S": 6.0, "F": 4.0}
 reverse_mapping_2 =  {10: "P", 9: "P", 8: "P", 7: "P", 6: "P", 5: "P", 4: "F", 3: "F", 2: "F", 1: "F"}
 reverse_mapping_4 =  {10: "E", 9: "G", 8: "G", 7: "G", 6: "S", 5: "S", 4: "F", 3: "F", 2: "F", 1: "F"}  # previously
 reverse_mapping_5 =  {10: "E", 9: "V", 8: "G", 7: "G", 6: "S", 5: "S", 4: "F", 3: "F", 2: "F", 1: "F"}
+# reverse_mapping_5 =  {'10': "E", '9': "V", '8': "G", '7': "G", '6': "S", '5': "S", '4': "F", '3': "F", '2': "F", '1': "F"}  # TODO: new data...
 reverse_mapping_7 = {10: "10", 9: "9", 8: "8", 7: "7", 6: "6", 5: "5", 4: "4", 3: "4", 2: "4", 1: "4"}
 
 post_proc_remap_5 = {"E": "E", "V": "V", "G": "G", "S": "S", "F": "F"}
@@ -42,8 +45,14 @@ def get_data_type_of_dataset(no_classes, labels):
 
 
 def get_data_type(dset_name):
-    data_type = grades_type if "note" in dset_name else categories_type
-    return data_type
+    if "note" in dset_name:
+        return grades_type
+    elif "categorii" in dset_name:
+        return categories_type
+    elif "online_" in dset_name or "traditional_" in dset_name:
+        return grades_type
+    else:
+        raise ValueError("Dataset type not recognised!")
 
 
 def map_category(no_classes, string_label):
@@ -57,6 +66,7 @@ def map_category(no_classes, string_label):
 
 
 def unmap_category(no_classes, integer_label):
+    integer_label = int(integer_label)  # safe check
     integer_label = min(integer_label, 10)
     integer_label = max(integer_label, 1)  # clipped to [1,10]
 

@@ -4,13 +4,13 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
-from research_edm.DATA.class_mapping import map_category, categories_type, get_data_type, unmap_category
+from research_edm.DATA.class_mapping import categories_type, get_data_type, map_category
+from research_edm.configs.paths import mapping_dump_base, dset_mean_stdev_dump_base, mask_dump_base, \
+    datasets_base_path, inference_dump_base, dataset_listings_path
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.inference.model_instantiation import instantiate_default_dryrun, parse_ctor_params, cls_task
 from research_edm.io.pickle_io import get_mean_std, dump_data, get_mask, get_labels_mapping
 from research_edm.normalisation.postprocessing import Wrap, identic
-from research_edm.configs.paths import mapping_dump_base, dset_mean_stdev_dump_base, mask_dump_base, \
-    datasets_base_path, inference_dump_base, dataset_listings_path
 
 
 def cross_train_model(no_classes, wrapped_model, features, labels, test_size):

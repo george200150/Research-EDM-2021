@@ -18,13 +18,13 @@ def main_norm():
         features = None
         dset_name = dataset.split("/")[-1].split(".")[0]
         for idx, batch in enumerate(tqdm(dataloader, desc='Iterating over dataset {}...'.format(dset_name))):
-            cls, im = batch
-            im = np.asarray([im], dtype=float)
+            _, f = batch
+            f = np.asarray([f], dtype=float)
 
             if features is not None:
-                features = np.concatenate((features, im))
+                features = np.concatenate((features, f))
             else:
-                features = im
+                features = f
 
         mean = np.mean(features, axis=0)
         stdev = np.std(features, axis=0)

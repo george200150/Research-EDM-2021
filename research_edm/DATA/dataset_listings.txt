@@ -1,8 +1,8 @@
-datasets/grades/En_plf_2019-2020_note.txt
-datasets/grades/En_plf_2020-2021_(online)_note.txt
-datasets/grades/plf_2019-2020_note.txt
-datasets/grades/plf_2020-2021_(online)_note.txt
-datasets/categories/En_plf_2019-2020_categorii.txt
-datasets/categories/En_plf_2020-2021_(online)_categorii.txt
-datasets/categories/plf_2019-2020_categorii.txt
-datasets/categories/plf_2020-2021_(online)_categorii.txt
+datasets/grades/online_2020-2021.txt
+datasets/grades/online_2020-2021_FP.txt
+datasets/grades/online_2020-2021_SDA.txt
+datasets/grades/online_2020-2021_SDA_FP.txt
+datasets/grades/traditional_2018-2020.txt
+datasets/grades/traditional_2018-2020_FP.txt
+datasets/grades/traditional_2018-2020_SDA.txt
+datasets/grades/traditional_2018-2020_SDA_FP.txt

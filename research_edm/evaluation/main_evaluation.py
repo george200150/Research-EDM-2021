@@ -1,10 +1,11 @@
 import os
+
 import xlsxwriter
 from tqdm import tqdm
 
 from research_edm.DATA.class_mapping import unmap_category, classes_grades, categories_type, \
     get_data_type, grades_type, get_data_type_of_dataset, map_category, classes_categories_7, classes_categories_5, \
-    classes_categories_2, post_proc_remap_2, post_proc_remap_5
+    classes_categories_2, post_proc_remap_2
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
@@ -70,22 +71,36 @@ def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mappin
             gts = labels_mapping.inverse_transform(gts)
             preds = labels_mapping.inverse_transform(preds)  # TODO: check type
             # post-process predictions
-            if len(classes) == 7:
-                pass
-            elif no_classes == 5:
-                preds = np.asarray([post_proc_remap_5[x] for x in preds])
-                gts = np.asarray([post_proc_remap_5[x] for x in gts])
-            elif no_classes == 2:
-                preds = np.asarray([post_proc_remap_2[x] for x in preds])
-                gts = np.asarray([post_proc_remap_2[x] for x in gts])
-            else:
-                raise ValueError("Cannot remap predictions!")
+            # if len(classes) == 7:  # TODO: refactor later
+            #     if gts[0] in classes_categories_5:
+            #         classes = classes_categories_5  # quick fix?
+            #         # TODO: refactor later
+            #         no_classes = 5
+            #         raise AssertionError("Stop right there.")
+            # elif no_classes == 5:
+            #     wrapped_model.data_type = categories_type  # TODO: quickfix ?
+            #
+            #     # preds = np.asarray([post_proc_remap_5[x] for x in preds])
+            #     # gts = np.asarray([post_proc_remap_5[x] for x in gts])
+            #     # preds = np.asarray([unmap_category(no_classes, int(round(x))) for x in preds])  # regression
+            #     preds = np.asarray([unmap_category(no_classes, int(x)) for x in preds])  # classification
+            #     gts = np.asarray([unmap_category(no_classes, x) for x in gts])
+            # elif no_classes == 2:
+            #     preds = np.asarray([post_proc_remap_2[x] for x in preds])
+            #     gts = np.asarray([post_proc_remap_2[x] for x in gts])
+            # else:
+            #     raise ValueError("Cannot remap predictions!")
         else:
+            if len(classes) < 7:
+                wrapped_model.data_type = categories_type  # TODO: evaluate using categories
+
             if wrapped_model.data_type == categories_type:
                 preds = list([unmap_category(no_classes, int(round(x))) for x in preds])
+                gts = np.asarray([unmap_category(no_classes, x) for x in gts])  # TODO: refactor later
             else:
-                preds = list([str((int(round(x)))) for x in preds])
+                preds = list([(int(round(x))) for x in preds])
 
+        # print(wrapped_model.complete_model_name)
         conf_matrix = get_confusion_matrix(gts, preds, classes)  # TODO: still, please verify label order integrity...
         if sum_conf_matrix is None:
             sum_conf_matrix = conf_matrix
@@ -222,7 +237,15 @@ def main_evaluation(no_classes, results_paths, learning):
 
         if data_type == grades_type:
             dump_xlsx_file = os.path.join(base_dump_xlxs, learning, grades_type, pre_name, dset_name + str(no_classes) + ".xlsx")
-            classes = classes_grades
+            # classes = classes_grades  # TODO: 7 grades invariant (not good)
+            if no_classes == 2:
+                classes = classes_categories_2
+            elif no_classes == 5:
+                classes = classes_categories_5
+            elif no_classes == 7:
+                classes = classes_categories_7
+            else:
+                raise ValueError("No such class mapping!")
         else:
             dump_xlsx_file = os.path.join(base_dump_xlxs, learning, categories_type, pre_name, dset_name + str(no_classes) + ".xlsx")
             if no_classes == 2:
