@@ -1,12 +1,12 @@
 experiment:
-  no_classes: 5
+  no_classes: 7
   preprocessings: ["identic"]  # "asinh", "identic", "log"
   normalisation: True  # False
   supervised:
     models:
-#      active: ['sgdr', 'tr', 'poly']  # 'mlp', 'nb', 'lr', 'sgdr', 'tr', 'poly'
+      active: ['sgdr', 'tr', 'poly']  # 'mlp', 'nb', 'lr', 'sgdr', 'tr', 'poly'
 #      active: ['mlp']
-      active: ['poly']
+#      active: ['poly', 'tr']
 #      active: ['mlp', 'poly']
       configs:
         mlp:

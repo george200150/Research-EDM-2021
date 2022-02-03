@@ -1,25 +1,3 @@
-# def prec(matrix):
-#     first_line = matrix[0]  # C6:G6
-#     first_val = first_line[0]  # C6
-#     return first_val / sum(first_line)  # =C6/sum(C6:G6)
-#
-#
-# def recall(matrix):
-#     first_column = matrix[:, 0]  # C6:C10
-#     first_val = first_column[0]  # C6
-#     return first_val / sum(first_column)  # =C6/sum(C6:C10)
-#
-#
-# def f_measure(prec, recall):
-#     return 2 / (1 / prec + 1 / recall)  # =2/(1/C14+1/C15)
-#
-#
-# def weight(matrix):
-#     first_column = sum(matrix[:, 0])  # sum(C6:C10)
-#     matrix_total = sum([sum(line) for line in matrix])  # sum($C6:$G10)
-#     return first_column / matrix_total  # =sum(C6:C10)/sum($C6:$G10)
-
-
 def get_overall_accuracy(cmsr, cmsc, n):
     tp_cells = []
     for i in range(n):

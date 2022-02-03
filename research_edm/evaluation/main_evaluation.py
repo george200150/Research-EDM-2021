@@ -1,11 +1,12 @@
 import os
 
 import xlsxwriter
+from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
 
-from research_edm.DATA.class_mapping import unmap_category, classes_grades, categories_type, \
+from research_edm.DATA.class_mapping import unmap_category, categories_type, \
     get_data_type, grades_type, get_data_type_of_dataset, map_category, classes_categories_7, classes_categories_5, \
-    classes_categories_2, post_proc_remap_2
+    classes_categories_2
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
@@ -51,6 +52,29 @@ def write_overall_accuracy(cmsc, cmsr, i, n, omsc, worksheet):
     # =C6/sum(C6:G6)
 
 
+def clip_4_10(x):
+    return min(max(x, 4), 10)
+
+
+def clip_all(arr):
+    return [clip_4_10(x) for x in arr]
+
+
+def rmse(gts, preds):
+    return mean_squared_error(gts, clip_all(preds), squared=False)
+    # TODO: for a fair score, results must be clipped to [4..10]
+
+
+def nrmse(gts, preds, cm=None):
+    # matrix_total = sum([sum(line) for line in cm])
+    #
+    # weights = []
+    # for indx in range(len(cm)):
+    #     weights.append(sum(cm[:, indx]) / matrix_total)
+    # TODO: we will consider NRMSE == RMSE / (ymax - ymin), where ymax=10 & ymin=4
+    return rmse(gts, preds) / 6
+
+
 def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mapping, result_file):
     if len(classes) == 7 or no_classes == 7:  # grades
         classes_categories = classes_categories_7
@@ -69,34 +93,14 @@ def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mappin
 
         if wrapped_model.task_type == cls_task:
             gts = labels_mapping.inverse_transform(gts)
-            preds = labels_mapping.inverse_transform(preds)  # TODO: check type
-            # post-process predictions
-            # if len(classes) == 7:  # TODO: refactor later
-            #     if gts[0] in classes_categories_5:
-            #         classes = classes_categories_5  # quick fix?
-            #         # TODO: refactor later
-            #         no_classes = 5
-            #         raise AssertionError("Stop right there.")
-            # elif no_classes == 5:
-            #     wrapped_model.data_type = categories_type  # TODO: quickfix ?
-            #
-            #     # preds = np.asarray([post_proc_remap_5[x] for x in preds])
-            #     # gts = np.asarray([post_proc_remap_5[x] for x in gts])
-            #     # preds = np.asarray([unmap_category(no_classes, int(round(x))) for x in preds])  # regression
-            #     preds = np.asarray([unmap_category(no_classes, int(x)) for x in preds])  # classification
-            #     gts = np.asarray([unmap_category(no_classes, x) for x in gts])
-            # elif no_classes == 2:
-            #     preds = np.asarray([post_proc_remap_2[x] for x in preds])
-            #     gts = np.asarray([post_proc_remap_2[x] for x in gts])
-            # else:
-            #     raise ValueError("Cannot remap predictions!")
+            preds = labels_mapping.inverse_transform(preds)
         else:
             if len(classes) < 7:
-                wrapped_model.data_type = categories_type  # TODO: evaluate using categories
+                wrapped_model.data_type = categories_type
 
             if wrapped_model.data_type == categories_type:
                 preds = list([unmap_category(no_classes, int(round(x))) for x in preds])
-                gts = np.asarray([unmap_category(no_classes, x) for x in gts])  # TODO: refactor later
+                gts = np.asarray([unmap_category(no_classes, x) for x in gts])
             else:
                 preds = list([(int(round(x))) for x in preds])
 
@@ -111,8 +115,21 @@ def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mappin
     sum_conf_matrix = np.flip(sum_conf_matrix)  # sklearn uses other confusion matrix format
     sum_conf_matrix = np.transpose(sum_conf_matrix)  # our table uses other confusion matrix format
 
+    folds_rmse = []
+    folds_nrmse = []
+    for i in tqdm(range(0, 10), desc="k-fold evaluating..."):
+        xs, gts, wrapped_model = ready_for_eval[i]
+        preds = wrapped_model.model.predict(xs)
+        folds_rmse.append(rmse(gts, preds))
+        folds_nrmse.append(nrmse(gts, preds, sum_conf_matrix))
+
     workbook = xlsxwriter.Workbook(result_file)
     worksheet = workbook.add_worksheet()
+
+    worksheet.write("J4", "RMSE:")
+    worksheet.write("J5", "NRMSE:")
+    worksheet.write("K4", str(sum(folds_rmse) / len(folds_rmse)))
+    worksheet.write("K5", str(sum(folds_nrmse) / len(folds_nrmse)))
 
     worksheet.write("A4", "Predict")
     worksheet.write("A5", "ed class")
@@ -237,7 +254,6 @@ def main_evaluation(no_classes, results_paths, learning):
 
         if data_type == grades_type:
             dump_xlsx_file = os.path.join(base_dump_xlxs, learning, grades_type, pre_name, dset_name + str(no_classes) + ".xlsx")
-            # classes = classes_grades  # TODO: 7 grades invariant (not good)
             if no_classes == 2:
                 classes = classes_categories_2
             elif no_classes == 5:
