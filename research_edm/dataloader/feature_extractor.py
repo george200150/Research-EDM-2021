@@ -13,12 +13,11 @@ def get_features_labels(data_file, transform, mean=None, stdev=None, normalise=F
     for idx, batch in enumerate(tqdm(dataloader, desc='Loading features...')):
         cls, f = batch
         f = np.asarray([f], dtype=float)
+
         assert len(labels) == (len(features) if features is not None else 0)
+        labels.append(cls)
 
-        # labels.append(cls)
-        labels.append(int(cls))  # TODO: only integers as labels...
         current_features = f
-
         if features is not None:
             features = np.concatenate((features, current_features))
         else:

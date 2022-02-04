@@ -1,4 +1,8 @@
-todo:
+## TODO:
 
-- TODO: MUST CHECK IF CATEGORY TO INT MAPPING IS DONE WELL (WORSE PERFORMANCE FOR CLASSES)
-
+- ### implement:
+    - quality measurement (paper)
+    - relief-based feature extraction
+  
+  
+- see what regressors I can use for best performance

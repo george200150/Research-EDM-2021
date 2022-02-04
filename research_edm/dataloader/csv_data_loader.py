@@ -5,14 +5,8 @@ class CsvDataLoader:
     def __init__(self, data_file, transform=Wrap(identic), mean=None, stdev=None, normalise=False, num_images=None):
         csv = open(data_file)
         lines = csv.readlines()
-        # ###########################################old format#########################################################
-        # self.data_size = int(lines[0].strip())
-        # self.no_cols = int(lines[1].strip())
-        # data = [list(x.strip().split(",")) for x in lines[2:]]
-        # ###########################################new format#########################################################
         self.data_size = len(lines) - 1
         data = [list(x.strip().split(",")) for x in lines[1:]]
-        ################################################################################################################
         data_dicts = []
         for d in data:
             ddict = {}
@@ -25,7 +19,7 @@ class CsvDataLoader:
                 ddict = {"label": d[0],
                          "features": [transform(x) for x in norm_data]}
             except Exception as e:
-                print(e)  # Do not forget that logarithm is not defined on negative numbers !!!
+                print(e)
                 print(norm_data)
             data_dicts.append(ddict)
         self.data = data_dicts

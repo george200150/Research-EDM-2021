@@ -1,10 +1,10 @@
 import os
 
 import numpy as np
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
-from research_edm.DATA.class_mapping import categories_type, get_data_type, map_category
+from research_edm.DATA.class_mapping import get_data_type
 from research_edm.configs.paths import mapping_dump_base, dset_mean_stdev_dump_base, mask_dump_base, \
     datasets_base_path, inference_dump_base, dataset_listings_path
 from research_edm.dataloader.feature_extractor import get_features_labels
@@ -13,18 +13,28 @@ from research_edm.io.pickle_io import get_mean_std, dump_data, get_mask, get_lab
 from research_edm.normalisation.postprocessing import Wrap, identic
 
 
+def train_test_split(features, test_size=0.1, slice=0):  # lists received by this function have already been shuffled
+    sz = len(features) * test_size
+    i = int(sz * slice)
+    i_1 = int(sz*(slice+1))
+    train = np.concatenate((features[:i], features[i_1:]), axis=0)
+    test = features[i:i_1]
+    return train, test
+
+
 def cross_train_model(no_classes, wrapped_model, features, labels, test_size):
     ready_for_eval = []
     for i in tqdm(range(0, 10), desc="k-fold training model {}...".format(wrapped_model.name)):
-        x_train, x_test = train_test_split(features, test_size=test_size, random_state=i)
-        y_train, y_test = train_test_split(labels, test_size=test_size, random_state=i)
-        if wrapped_model.task_type == cls_task:
+        x_train, x_test = train_test_split(features, test_size=test_size, slice=i)
+        y_train, y_test = train_test_split(labels, test_size=test_size, slice=i)
+        if wrapped_model.task_type == cls_task:  # only classification uses one-hot labels
+            # TODO: at the moment, the framework does not support training of different gt label mappings (only eval)
+            # further implementations would use a remapping of the gt labels, considering no_classes
             wrapped_model.model = wrapped_model.model.fit(x_train, y_train)
-        else:
-            if wrapped_model.data_type == categories_type:
-                wrapped_model.model = wrapped_model.model.fit(x_train, list([map_category(no_classes, x) for x in y_train]))
-            else:
-                wrapped_model.model = wrapped_model.model.fit(x_train, list([float(x) for x in y_train]))
+        else:  # regression models must be trained only on the integer labels
+            y_train = list([float(x) for x in y_train])
+            y_test = list([float(x) for x in y_test])
+            wrapped_model.model = wrapped_model.model.fit(x_train, y_train)
 
         ready_for_eval.append([x_test, y_test, wrapped_model])
     return ready_for_eval
@@ -59,17 +69,17 @@ def infer_dataset(no_classes, active_models, models_configs, dset, transform, no
     else:
         wrapped_models = parse_ctor_params(models_configs, active_models)  # TODO: not open-closed
 
-    # one-hot encode the labels (only for classification)
-    one_hot_labels = lb.transform(labels)
-    labels_back = lb.inverse_transform(one_hot_labels)
-    assert labels == list(labels_back), "Mapping between one-hot and categorical is not well defined!"
-
     paths = []
     for wrapped_model in wrapped_models:
         wrapped_model.set_trained_data_type(data_type)
         if wrapped_model.task_type == cls_task:
+            # one-hot encode the labels (only for classification)
+            one_hot_labels = lb.transform(labels)
+            labels_back = lb.inverse_transform(one_hot_labels)
+            assert labels == list(labels_back), "Mapping between one-hot and categorical is not well defined!"
             ready_for_eval = cross_train_model(no_classes, wrapped_model, features, one_hot_labels, test_size=0.1)
-        else:  # multi-collinearity problems for one-hot regression
+        else:
+            # multi-collinearity problems for one-hot regression
             ready_for_eval = cross_train_model(no_classes, wrapped_model, features, labels, test_size=0.1)
         wrapped_model.set_pkl_ending(transform, norm_flag)
         dump_path = os.path.join(inference_dump_base, data_type, transform.name,

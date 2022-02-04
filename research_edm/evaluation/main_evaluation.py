@@ -4,14 +4,12 @@ import xlsxwriter
 from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
 
-from research_edm.DATA.class_mapping import unmap_category, categories_type, \
-    get_data_type, grades_type, get_data_type_of_dataset, map_category, classes_categories_7, classes_categories_5, \
-    classes_categories_2
+from research_edm.DATA.class_mapping import unmap_category, get_data_type, grades_type, get_data_type_of_dataset, \
+    map_category, classes_categories_7, classes_categories_5, classes_categories_2
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
 from research_edm.evaluation.xslx_metrics import get_overall_accuracy, get_overall_non_acc_metric
-from research_edm.inference.model_instantiation import cls_task
 from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping
 
 
@@ -61,58 +59,33 @@ def clip_all(arr):
 
 
 def rmse(gts, preds):
+    # For a fair score, results must be clipped to [4..10]
     return mean_squared_error(gts, clip_all(preds), squared=False)
-    # TODO: for a fair score, results must be clipped to [4..10]
 
 
-def nrmse(gts, preds, cm=None):
-    # matrix_total = sum([sum(line) for line in cm])
-    #
-    # weights = []
-    # for indx in range(len(cm)):
-    #     weights.append(sum(cm[:, indx]) / matrix_total)
-    # TODO: we will consider NRMSE == RMSE / (ymax - ymin), where ymax=10 & ymin=4
+def nrmse(gts, preds):
+    # We will consider NRMSE == RMSE / (ymax - ymin), where ymax=10 & ymin=4
     return rmse(gts, preds) / 6
 
 
 def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mapping, result_file):
-    if len(classes) == 7 or no_classes == 7:  # grades
-        classes_categories = classes_categories_7
-    elif no_classes == 5:  # E V G S F
-        classes_categories = classes_categories_5
-    elif no_classes == 2:  # P F
-        classes_categories = classes_categories_2
-    else:
-        raise ValueError("No such class mapping!")
-
     # evaluate 10-fold
     sum_conf_matrix = None
     for i in tqdm(range(0, 10), desc="k-fold evaluating..."):
         xs, gts, wrapped_model = ready_for_eval[i]
         preds = wrapped_model.model.predict(xs)
 
-        if wrapped_model.task_type == cls_task:
-            gts = labels_mapping.inverse_transform(gts)
-            preds = labels_mapping.inverse_transform(preds)
-        else:
-            if len(classes) < 7:
-                wrapped_model.data_type = categories_type
+        # TODO: should use labels_mapping for one-hot decoding (classification) - use wrapped_model.task_type
+        # setup the evaluation configuration, since the gts and preds labels are integers
+        preds = list([unmap_category(no_classes, int(round(x))) for x in preds])
+        gts = np.asarray([unmap_category(no_classes, x) for x in gts])
 
-            if wrapped_model.data_type == categories_type:
-                preds = list([unmap_category(no_classes, int(round(x))) for x in preds])
-                gts = np.asarray([unmap_category(no_classes, x) for x in gts])
-            else:
-                preds = list([(int(round(x))) for x in preds])
-
-        # print(wrapped_model.complete_model_name)
-        conf_matrix = get_confusion_matrix(gts, preds, classes)  # TODO: still, please verify label order integrity...
+        conf_matrix = get_confusion_matrix(gts, preds, classes)
         if sum_conf_matrix is None:
             sum_conf_matrix = conf_matrix
         else:
             sum_conf_matrix += conf_matrix
 
-    # sum_conf_matrix = sum_conf_matrix / 10.0
-    sum_conf_matrix = np.flip(sum_conf_matrix)  # sklearn uses other confusion matrix format
     sum_conf_matrix = np.transpose(sum_conf_matrix)  # our table uses other confusion matrix format
 
     folds_rmse = []
@@ -120,8 +93,15 @@ def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mappin
     for i in tqdm(range(0, 10), desc="k-fold evaluating..."):
         xs, gts, wrapped_model = ready_for_eval[i]
         preds = wrapped_model.model.predict(xs)
+
+        # As we cannot easily define a distance between string labels, we remap them to integers
+        # clipping the labels to [4,10] (gts are already in [4,10])
+        preds = list([unmap_category(no_classes, int(round(x))) for x in preds])
+        preds = list([map_category(no_classes, int(round(x))) for x in preds])
+        gts = np.asarray([map_category(no_classes, x) for x in gts])
+
         folds_rmse.append(rmse(gts, preds))
-        folds_nrmse.append(nrmse(gts, preds, sum_conf_matrix))
+        folds_nrmse.append(nrmse(gts, preds))
 
     workbook = xlsxwriter.Workbook(result_file)
     worksheet = workbook.add_worksheet()
@@ -133,14 +113,16 @@ def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mappin
 
     worksheet.write("A4", "Predict")
     worksheet.write("A5", "ed class")
+    worksheet.write("A6", "PRED")
 
     worksheet.write("E1", "Actual class")
+    worksheet.write("E2", "GT")
 
     conf_matrix_starting_row, conf_matrix_starting_column = "C", 3
     cmsc = conf_matrix_starting_column
     cmsr = conf_matrix_starting_row
 
-    for idx, categ in enumerate(classes_categories):
+    for idx, categ in enumerate(classes):
         worksheet.write(chr(ord(cmsr) + idx) + str(cmsc-1), categ)
         worksheet.write(chr(ord(cmsr)-1) + str(cmsc + idx), categ)
 
@@ -155,7 +137,7 @@ def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mappin
 
     ####################################################################################################################
 
-    n = len(classes_categories)
+    n = len(classes)
 
     overall_metrics_starting_row, overall_metrics_starting_column = "J", 13
     omsc = overall_metrics_starting_column
@@ -252,26 +234,18 @@ def main_evaluation(no_classes, results_paths, learning):
         dset_name = dset_pkl.split(".")[0]
         data_type = get_data_type(dset_name)
 
-        if data_type == grades_type:
-            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, grades_type, pre_name, dset_name + str(no_classes) + ".xlsx")
-            if no_classes == 2:
-                classes = classes_categories_2
-            elif no_classes == 5:
-                classes = classes_categories_5
-            elif no_classes == 7:
-                classes = classes_categories_7
-            else:
-                raise ValueError("No such class mapping!")
+        # remap the labels for the desired evaluation configuration
+        # TODO: for now, all models are trained on 7 integer label classes, then evaluated on 7/5 classes, as desired.
+        if no_classes == 2:
+            classes = classes_categories_2
+        elif no_classes == 5:
+            classes = classes_categories_5
+        elif no_classes == 7:
+            classes = classes_categories_7
         else:
-            dump_xlsx_file = os.path.join(base_dump_xlxs, learning, categories_type, pre_name, dset_name + str(no_classes) + ".xlsx")
-            if no_classes == 2:
-                classes = classes_categories_2
-            elif no_classes == 5:
-                classes = classes_categories_5
-            elif no_classes == 7:
-                classes = classes_categories_7
-            else:
-                raise ValueError("No such class mapping!")
+            raise ValueError("No such class mapping!")
+
+        dump_xlsx_file = os.path.join(base_dump_xlxs, learning, data_type, pre_name, dset_name + str(no_classes) + ".xlsx")
 
         if learning == "supervised":  # principle open-closed not respected below...
             for word in ["_asinh", "_identic", "_log", "_norm", "_mlp", "_nb", "_lr", "_sgdr", "_tr", "_poly"]:

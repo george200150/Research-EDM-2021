@@ -27,7 +27,7 @@ def main_norm():
                 features = f
 
         mean = np.mean(features, axis=0)
-        stdev = np.std(features, axis=0)
+        stdev = np.std(features, axis=0)  # sqrt(sum((x-x_topline)^2)/n)
 
         dataset_mean_stdev_dump_file = "{}_mean_stdev.pkl".format(dset_name)
         dump_data([mean, stdev], os.path.join(dset_mean_stdev_dump_base, dataset_mean_stdev_dump_file))
