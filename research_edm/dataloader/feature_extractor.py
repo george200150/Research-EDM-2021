@@ -1,3 +1,4 @@
+from skrebate import ReliefF
 from tqdm import tqdm
 import numpy as np
 
@@ -22,4 +23,8 @@ def get_features_labels(data_file, transform, mean=None, stdev=None, normalise=F
             features = np.concatenate((features, current_features))
         else:
             features = current_features
+
+    # TODO: add relief-based feature extraction
+    features = ReliefF(n_features_to_select=10, n_neighbors=150).fit_transform(features, labels)
+
     return features, labels

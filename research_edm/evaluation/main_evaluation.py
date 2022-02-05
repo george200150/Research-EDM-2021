@@ -7,7 +7,7 @@ from tqdm import tqdm
 from research_edm.DATA.class_mapping import unmap_category, get_data_type, grades_type, get_data_type_of_dataset, \
     map_category, classes_categories_7, classes_categories_5, classes_categories_2
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
-from research_edm.evaluation.classification_metrics import get_confusion_matrix
+from research_edm.evaluation.classification_metrics import get_confusion_matrix, get_quality_metrix
 from research_edm.evaluation.clustering_metrics import *
 from research_edm.evaluation.xslx_metrics import get_overall_accuracy, get_overall_non_acc_metric
 from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping
@@ -48,6 +48,13 @@ def write_overall_accuracy(cmsc, cmsr, i, n, omsc, worksheet):
     denom = "sum(" + chr(ord(cmsr)) + str(cmsc + i) + ":" + chr(ord(cmsr) + n - 1) + str(cmsc + i) + ")"
     worksheet.write(chr(ord(cmsr) + i) + str(omsc + 1), division_check(nom, denom))
     # =C6/sum(C6:G6)
+
+
+def write_cis(cmsr, omsc, omsr, n, worksheet):
+    for i in range(3):
+        row = str(omsc + (i+1))
+        worksheet.write(chr(ord(omsr)+1) + row, "=1.96 * STDEVP("
+                        + chr(ord(cmsr)) + row + " : " + chr(ord(cmsr) + n - 1) + row + ") / SQRT(10)")
 
 
 def clip_4_10(x):
@@ -95,9 +102,9 @@ def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mappin
         preds = wrapped_model.model.predict(xs)
 
         # As we cannot easily define a distance between string labels, we remap them to integers
-        # clipping the labels to [4,10] (gts are already in [4,10])
         preds = list([unmap_category(no_classes, int(round(x))) for x in preds])
-        preds = list([map_category(no_classes, int(round(x))) for x in preds])
+        gts = list([unmap_category(no_classes, int(round(x))) for x in gts])
+        preds = list([map_category(no_classes, x) for x in preds])
         gts = np.asarray([map_category(no_classes, x) for x in gts])
 
         folds_rmse.append(rmse(gts, preds))
@@ -162,6 +169,10 @@ def export_metrics_supervised(no_classes, ready_for_eval, classes, labels_mappin
         worksheet.write(chr(ord(omsr)) + str(omsc+2), get_overall_non_acc_metric(cmsr, omsc+1, n, offset=1))
         worksheet.write(chr(ord(omsr)) + str(omsc+3), get_overall_non_acc_metric(cmsr, omsc+1, n, offset=2))
 
+    write_cis(cmsr, omsc, omsr, n, worksheet)
+    # worksheet.write_number("J6", "QUALITY:")  # at the moment, dataset quality is just logged
+    # worksheet.write_number("K6", quality)
+
     ####################################################################################################################
 
     workbook.close()
@@ -172,7 +183,7 @@ def export_metrics_unsupervised(no_classes, xs, preds, gts, result_file):
     if get_data_type_of_dataset(no_classes, gts) == grades_type:
         gts = list([int(y) for y in gts])
     else:
-        gts = list([map_category(no_classes, y) for y in gts])
+        gts = list([map_category(no_classes, y) for y in gts])  # TODO: changed implementation
 
     workbook = xlsxwriter.Workbook(result_file)
     worksheet = workbook.add_worksheet()

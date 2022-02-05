@@ -1,1 +1,2 @@
-datasets/grades/test_online_test.txt
+datasets/grades/online_2020-2021_SDA_FP.txt
+datasets/grades/traditional_2018-2020_SDA_FP.txt
