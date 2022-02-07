@@ -147,10 +147,10 @@ if __name__ == '__main__':
     # main_pipeline_supervised_FIRST_RUN_ONLY(no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs)
     # creates randomly generated masks, that are consistent cross-experiment
 
-    main_pipeline_supervised_TRAIN_OVERWRITE(no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs)
+    # main_pipeline_supervised_TRAIN_OVERWRITE(no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs)
     # uses previously generated files; overwrites data, labels and models
 
-    # main_pipeline_supervised_ONLY_EVAL(no_classes)
+    main_pipeline_supervised_ONLY_EVAL(no_classes)
     # evaluates the already trained classifiers (double checking only)
 
     # main_pipeline_unsupervised(no_classes, preprocessings, normalisation, savefig, fresh_start, active_unsupervised_models, unsupervised_models_configs)

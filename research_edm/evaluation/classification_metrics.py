@@ -33,17 +33,18 @@ def diff(g, labels, features):
 
     @param g: grade - integer
     """
-    n = len(labels)
     indx = np.expand_dims(np.asarray([x for x in range(len(features))]), 1)  # uniquely identify each student
     features = np.concatenate((indx, features), axis=1)
 
+    n = 0
     counter = 0
     for result, grades in zip(labels, features):
         if int(result) != g:
             continue
-        if int(get_nn(grades, labels, features)) != g:
-            counter += 1
-    return counter / n
+        if int(get_nn(grades, labels, features)) != g:  # #(st_g not g_nn)
+            counter += 1  #st_g
+        n += 1
+    return counter / n  # ratio of students with grade "g" => #(st_g not g_nn) / #st_g
 
 
 def sum_diff(st, a):

@@ -1,8 +1,8 @@
-[INFO]: For dataset datasets/grades/online_2020-2021.txt, the quality is the following: 0.9016253207869974
-[INFO]: For dataset datasets/grades/online_2020-2021_FP.txt, the quality is the following: 0.8973481608212147
-[INFO]: For dataset datasets/grades/online_2020-2021_SDA.txt, the quality is the following: 0.8973481608212147
-[INFO]: For dataset datasets/grades/online_2020-2021_SDA_FP.txt, the quality is the following: 0.9016253207869974
-[INFO]: For dataset datasets/grades/traditional_2018-2020.txt, the quality is the following: 0.9089759797724399
-[INFO]: For dataset datasets/grades/traditional_2018-2020_FP.txt, the quality is the following: 0.9119258322798146
-[INFO]: For dataset datasets/grades/traditional_2018-2020_SDA.txt, the quality is the following: 0.9140328697850821
-[INFO]: For dataset datasets/grades/traditional_2018-2020_SDA_FP.txt, the quality is the following: 0.9119258322798146
+[INFO]: For dataset datasets/grades/online_2020-2021.txt, the quality is the following: 0.2822510822510823
+[INFO]: For dataset datasets/grades/online_2020-2021_FP.txt, the quality is the following: 0.25681818181818183
+[INFO]: For dataset datasets/grades/online_2020-2021_SDA.txt, the quality is the following: 0.26082251082251073
+[INFO]: For dataset datasets/grades/online_2020-2021_SDA_FP.txt, the quality is the following: 0.2695887445887445
+[INFO]: For dataset datasets/grades/traditional_2018-2020.txt, the quality is the following: 0.3292638648937165
+[INFO]: For dataset datasets/grades/traditional_2018-2020_FP.txt, the quality is the following: 0.337567262699764
+[INFO]: For dataset datasets/grades/traditional_2018-2020_SDA.txt, the quality is the following: 0.3234993798681437
+[INFO]: For dataset datasets/grades/traditional_2018-2020_SDA_FP.txt, the quality is the following: 0.321168225784648
