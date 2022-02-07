@@ -1,0 +1,355 @@
+C:\ProgramData\Anaconda3\envs\scratchEnv\python.exe C:/Users/George/PycharmProjects/Research-EDM-2021/research_edm/dataloader/relief_based_features.py
+neighbours:  25
+features:  1
+Loading features...: 100%|██████████| 339/339 [00:00<00:00, 171972.55it/s]
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 25 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 25 NEIGHBOURS is: 0.14441890617633202
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 25 NEIGHBOURS is: 0.14351310907488268
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 25 NEIGHBOURS is: 0.14351310907488268
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 25 NEIGHBOURS is: 0.14351310907488268
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 25 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 25 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 25 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 25 NEIGHBOURS is: 0.14739009044482487
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 25 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 25 NEIGHBOURS is: 0.14739009044482487
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 25 NEIGHBOURS is: 0.14739009044482487
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 25 NEIGHBOURS is: 0.14946048381956611
+neighbours:  50
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 50 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 50 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 50 NEIGHBOURS is: 0.14144271570014144
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 50 NEIGHBOURS is: 0.14351310907488268
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 50 NEIGHBOURS is: 0.14351310907488268
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 50 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 50 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 50 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 50 NEIGHBOURS is: 0.14739009044482487
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 50 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 50 NEIGHBOURS is: 0.14739009044482487
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 50 NEIGHBOURS is: 0.14739009044482487
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 50 NEIGHBOURS is: 0.14946048381956611
+neighbours:  75
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 75 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 75 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 75 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 75 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 75 NEIGHBOURS is: 0.14351310907488268
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 75 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 75 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 75 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 75 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 75 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 75 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 75 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 75 NEIGHBOURS is: 0.14946048381956611
+neighbours:  100
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 100 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 100 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 100 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 100 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 100 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 100 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 100 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 100 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 100 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 100 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 100 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 100 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 100 NEIGHBOURS is: 0.14946048381956611
+neighbours:  125
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 125 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 125 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 125 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 125 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 125 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 125 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 125 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 125 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 125 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 125 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 125 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 125 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 125 NEIGHBOURS is: 0.14946048381956611
+neighbours:  150
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 150 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 150 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 150 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 150 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 150 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 150 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 150 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 150 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 150 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 150 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 150 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 150 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 150 NEIGHBOURS is: 0.14946048381956611
+neighbours:  175
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 175 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 175 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 175 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 175 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 175 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 175 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 175 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 175 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 175 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 175 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 175 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 175 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 175 NEIGHBOURS is: 0.14946048381956611
+neighbours:  200
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 200 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 200 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 200 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 200 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 200 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 200 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 200 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 200 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 200 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 200 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 200 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 200 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 200 NEIGHBOURS is: 0.14946048381956611
+neighbours:  225
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 225 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 225 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 225 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 225 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 225 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 225 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 225 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 225 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 225 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 225 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 225 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 225 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 225 NEIGHBOURS is: 0.14946048381956611
+neighbours:  250
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 250 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 250 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 250 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 250 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 250 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 250 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 250 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 250 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 250 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 250 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 250 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 250 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 250 NEIGHBOURS is: 0.14946048381956611
+neighbours:  275
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 275 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 275 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 275 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 275 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 275 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 275 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 275 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 275 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 275 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 275 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 275 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 275 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 275 NEIGHBOURS is: 0.14946048381956611
+neighbours:  300
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 300 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 300 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 300 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 300 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 300 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 300 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 300 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 300 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 300 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 300 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 300 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 300 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 300 NEIGHBOURS is: 0.14946048381956611
+neighbours:  325
+features:  1
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 1 FEATURES and 325 NEIGHBOURS is: 0.14441890617633202
+features:  2
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 2 FEATURES and 325 NEIGHBOURS is: 0.14144271570014144
+features:  3
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 3 FEATURES and 325 NEIGHBOURS is: 0.1449270362576327
+features:  4
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 4 FEATURES and 325 NEIGHBOURS is: 0.14144271570014144
+features:  5
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 5 FEATURES and 325 NEIGHBOURS is: 0.14144271570014144
+features:  6
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 6 FEATURES and 325 NEIGHBOURS is: 0.14351310907488268
+features:  7
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 7 FEATURES and 325 NEIGHBOURS is: 0.14739009044482487
+features:  8
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 8 FEATURES and 325 NEIGHBOURS is: 0.14739009044482487
+features:  9
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 9 FEATURES and 325 NEIGHBOURS is: 0.1439057698873336
+features:  10
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 10 FEATURES and 325 NEIGHBOURS is: 0.1439057698873336
+features:  11
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 11 FEATURES and 325 NEIGHBOURS is: 0.14946048381956611
+features:  12
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 12 FEATURES and 325 NEIGHBOURS is: 0.14946048381956611
+features:  13
+Quality of dataset: datasets/grades/traditional_2018-2020_SDA_FP.txt with 13 FEATURES and 325 NEIGHBOURS is: 0.14946048381956611
+
+Process finished with exit code 0

@@ -1,20 +1,15 @@
 import os
 
 import numpy as np
-from sklearn.linear_model import SGDRegressor, TweedieRegressor, LinearRegression
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import PolynomialFeatures
 from skrebate import ReliefF
-from sklearn.model_selection import cross_val_score
 
 from research_edm.DATA.class_mapping import get_data_type
-from research_edm.configs.paths import mask_dump_base, dset_mean_stdev_dump_base, mapping_dump_base, datasets_base_path, \
+from research_edm.configs.paths import mask_dump_base, dset_mean_stdev_dump_base, datasets_base_path, \
     dataset_listings_path
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.evaluation.classification_metrics import get_quality_metrix
-from research_edm.io.pickle_io import get_labels_mapping, get_mean_std, get_mask
+from research_edm.io.pickle_io import get_mean_std, get_mask
 from research_edm.normalisation.postprocessing import Wrap, identic
-
 
 ds_fd = open(dataset_listings_path, "r")
 datasets = [x.strip() for x in ds_fd.readlines()]
@@ -29,8 +24,6 @@ norm_flag = False
 dset_name = dset.split("/")[-1].split(".")[0]
 data_type = get_data_type(dset_name)
 mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
-
-# lb = get_labels_mapping(os.path.join(mapping_dump_base, data_type, dset_name + ".pkl"))
 
 mean, stdev = get_mean_std(os.path.join(dset_mean_stdev_dump_base, mean_stdev_pkl_name))
 
@@ -54,30 +47,6 @@ for j in range(25, m+1, 25):
     print("neighbours: ", j)
     for i in range(1, n + 1):
         print("features: ", i)
-        sgdr = Pipeline([
-            ('relieff', ReliefF(n_features_to_select=i, n_neighbors=j)),
-            ('sgd', SGDRegressor(max_iter=6000))])
-        sgdr_base = Pipeline([('sgd', SGDRegressor(max_iter=6000))])
-
-        # tr = Pipeline([
-        #     ('relieff', ReliefF(n_features_to_select=i, n_neighbors=j)),
-        #     ('tweedie', TweedieRegressor(max_iter=6000))])
-        # tr_base = Pipeline([('tweedie', TweedieRegressor(max_iter=6000))])
-        #
-        # poly = Pipeline([
-        #     ('relieff', ReliefF(n_features_to_select=i, n_neighbors=j)),
-        #     ('poly', PolynomialFeatures(degree=5)),
-        #     ('linear', LinearRegression(fit_intercept=False))])
-        # poly_base = Pipeline([('poly', PolynomialFeatures(degree=5)),('linear', LinearRegression(fit_intercept=False))])
 
         q = get_quality_metrix(labels, ReliefF(n_features_to_select=i, n_neighbors=j).fit_transform(features, labels))
         print(f"Quality of dataset: {dset} with {i} FEATURES and {j} NEIGHBOURS is: {q}")
-
-        # print("SGDR:         ", np.mean(cross_val_score(sgdr, features, labels)))
-        # print("SGDR VANILLA: ", np.mean(cross_val_score(sgdr_base, features, labels)))
-
-        # print("TR:           ", np.mean(cross_val_score(tr, features, labels)))
-        # print("TR   VANILLA: ", np.mean(cross_val_score(tr_base, features, labels)))
-        #
-        # print("POLY:         ", np.mean(cross_val_score(poly, features, labels)))
-        # print("POLY VANILLA: ", np.mean(cross_val_score(poly, features, labels)))

@@ -10,11 +10,21 @@ def distance(p1, p2):  # n-D euclidean distance
     return np.linalg.norm(p1 - p2)
 
 
-def get_min_nn(nns):
+def get_min_nn(target_grade, nns):
     min_stud = None
+    min_stud_non_target = None
     for nn in nns:
         if min_stud is None or nn[1] < min_stud[1]:  # [0: label, 1: distance]
-            min_stud = nn
+            if nn[0] == target_grade:
+                min_stud = nn
+            else:
+                min_stud_non_target = nn
+    if min_stud_non_target is None:
+        return min_stud
+    if min_stud is None:
+        return min_stud_non_target
+    if min_stud_non_target[1] <= min_stud[1]:  # always favour increasing the difficulty (grade of student != "g")
+        return min_stud_non_target
     return min_stud
 
 
@@ -24,7 +34,7 @@ def get_nn(feat, labels, features):
         if feat[0] == feat_r[0]:  # avoid identical students
             continue
         nns.append([lab, distance(feat[1:], feat_r[1:])])
-    clossest_nn = get_min_nn(nns)
+    clossest_nn = get_min_nn(feat[0], nns)
     return clossest_nn[0]  # return the grade of the closest neighbour
 
 
@@ -42,7 +52,7 @@ def diff(g, labels, features):
         if int(result) != g:
             continue
         if int(get_nn(grades, labels, features)) != g:  # #(st_g not g_nn)
-            counter += 1  #st_g
+            counter += 1  # #st_g
         n += 1
     return counter / n  # ratio of students with grade "g" => #(st_g not g_nn) / #st_g
 
