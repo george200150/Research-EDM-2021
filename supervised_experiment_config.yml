@@ -4,9 +4,9 @@ experiment:
   normalisation: True  # False
   supervised:
     models:
-      active: ['sgdr', 'tr', 'poly']  # 'mlp', 'nb', 'lr', 'sgdr', 'tr', 'poly'
+#      active: ['sgdr', 'tr', 'poly']  # 'mlp', 'nb', 'lr', 'sgdr', 'tr', 'poly'
 #      active: ['mlp']
-#      active: ['poly', 'tr']
+      active: ['poly']
 #      active: ['mlp', 'poly']
       configs:
         mlp:
@@ -94,7 +94,8 @@ experiment:
     fresh_start: False
     savefig: False
     models:
-      active: ['umap']  # 't-sne', 'umap'
+#      active: ['umap']  # 't-sne', 'umap'
+      active: ['t-sne']
       configs:
         umap:
           n_neighbors: 15

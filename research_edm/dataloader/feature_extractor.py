@@ -25,6 +25,6 @@ def get_features_labels(data_file, transform, mean=None, stdev=None, normalise=F
             features = current_features
 
     # TODO: add relief-based feature extraction
-    # features = ReliefF(n_features_to_select=10, n_neighbors=150).fit_transform(features, labels)
+    # features = ReliefF(n_features_to_select=12, n_neighbors=150).fit_transform(features, labels)
 
     return features, labels

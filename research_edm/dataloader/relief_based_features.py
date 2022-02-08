@@ -15,8 +15,8 @@ ds_fd = open(dataset_listings_path, "r")
 datasets = [x.strip() for x in ds_fd.readlines()]
 paths = []
 
-dset = datasets[0]  # TODO: change dataset manually
-# dset = datasets[1]
+# dset = datasets[0]  # TODO: change dataset manually
+dset = datasets[1]
 
 transform = Wrap(identic)
 norm_flag = False

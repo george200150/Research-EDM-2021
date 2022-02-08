@@ -8,6 +8,7 @@ from research_edm.clustering.visualization import visualize_3d_clustering, gener
 from research_edm.configs.paths import dset_mean_stdev_dump_base, datasets_base_path, plot_dump_base, \
     dataset_listings_path, clustering_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
+from research_edm.evaluation.classification_metrics import get_quality_metrix
 from research_edm.inference.model_instantiation import parse_cluster_params, instantiate_clustering_dryrun
 from research_edm.io.pickle_io import get_mean_std, dump_data
 from research_edm.normalisation.postprocessing import identic, Wrap
@@ -88,6 +89,10 @@ def cluster_dataset(no_classes, dset, transform, normalisation, savefig, fresh_s
     # now that the k-means labels have been introduced, we must change the models' png endings
     for wrapped_model in wrapped_models:
         wrapped_model.set_png_ending(kmeans=True)
+
+    for indx, clustering in enumerate(clusterings):
+        print(f"[INFO]: For dataset {dset} and clustering {indx}, the quality is the following: "
+              f"{get_quality_metrix(st=labels, a=clustering)}")
 
     plot_my_data(clusterings, color_scheme, dset_name, fresh_start, kmeans_labels, savefig, title + " K-Means",
                  transform, wrapped_models)

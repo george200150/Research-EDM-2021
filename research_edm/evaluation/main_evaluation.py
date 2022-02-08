@@ -7,7 +7,7 @@ from tqdm import tqdm
 from research_edm.DATA.class_mapping import unmap_category, get_data_type, grades_type, get_data_type_of_dataset, \
     map_category, classes_categories_7, classes_categories_5, classes_categories_2
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
-from research_edm.evaluation.classification_metrics import get_confusion_matrix, get_quality_metrix
+from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
 from research_edm.evaluation.xslx_metrics import get_overall_accuracy, get_overall_non_acc_metric
 from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping
@@ -267,6 +267,7 @@ def main_evaluation(no_classes, results_paths, learning):
             export_metrics_supervised(no_classes, ready_for_eval, classes, lb, dump_xlsx_file)
         else:
             xs, preds, gts = get_clustering(path)
+            gts = [int(x) for x in gts]  # convert the labels to integers
             export_metrics_unsupervised(no_classes, xs, preds, gts, dump_xlsx_file)
 
 

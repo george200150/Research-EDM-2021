@@ -1,142 +1,142 @@
 C:\ProgramData\Anaconda3\envs\scratchEnv\python.exe C:/Users/George/PycharmProjects/Research-EDM-2021/research_edm/dataloader/relief_based_features.py
-Loading features...: 100%|██████████| 167/167 [00:00<00:00, 163312.84it/s]
+Loading features...: 100%|██████████| 167/167 [00:00<00:00, 84047.13it/s]
 neighbours:  25
 features:  1
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 25 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 25 NEIGHBOURS is: 0.0
 features:  2
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 25 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 25 NEIGHBOURS is: 0.03722943722943728
 features:  3
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 25 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 25 NEIGHBOURS is: 0.07665043290043283
 features:  4
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 25 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 25 NEIGHBOURS is: 0.2633387445887445
 features:  5
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 25 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 25 NEIGHBOURS is: 0.21471861471861475
 features:  6
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 25 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 25 NEIGHBOURS is: 0.2797348484848483
 features:  7
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 25 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 25 NEIGHBOURS is: 0.2897186147186146
 features:  8
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 25 NEIGHBOURS is: 0.15476190476190488
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 25 NEIGHBOURS is: 0.3274891774891774
 features:  9
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 25 NEIGHBOURS is: 0.15476190476190488
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 25 NEIGHBOURS is: 0.3246753246753247
 features:  10
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 25 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 25 NEIGHBOURS is: 0.3222943722943723
 features:  11
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 25 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 25 NEIGHBOURS is: 0.26601731601731593
 neighbours:  50
 features:  1
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 50 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 50 NEIGHBOURS is: 0.0
 features:  2
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 50 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 50 NEIGHBOURS is: 0.03722943722943728
 features:  3
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 50 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 50 NEIGHBOURS is: 0.07665043290043283
 features:  4
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 50 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 50 NEIGHBOURS is: 0.2633387445887445
 features:  5
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 50 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 50 NEIGHBOURS is: 0.2649891774891776
 features:  6
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 50 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 50 NEIGHBOURS is: 0.2542748917748918
 features:  7
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 50 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 50 NEIGHBOURS is: 0.23717532467532454
 features:  8
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 50 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 50 NEIGHBOURS is: 0.26263528138528136
 features:  9
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 50 NEIGHBOURS is: 0.15476190476190488
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 50 NEIGHBOURS is: 0.3246753246753247
 features:  10
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 50 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 50 NEIGHBOURS is: 0.3222943722943723
 features:  11
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 50 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 50 NEIGHBOURS is: 0.26601731601731593
 neighbours:  75
 features:  1
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 75 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 75 NEIGHBOURS is: 0.0
 features:  2
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 75 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 75 NEIGHBOURS is: 0.03722943722943728
 features:  3
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 75 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 75 NEIGHBOURS is: 0.07665043290043283
 features:  4
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 75 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 75 NEIGHBOURS is: 0.2633387445887445
 features:  5
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 75 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 75 NEIGHBOURS is: 0.2649891774891776
 features:  6
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 75 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 75 NEIGHBOURS is: 0.2542748917748918
 features:  7
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 75 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 75 NEIGHBOURS is: 0.23717532467532454
 features:  8
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 75 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 75 NEIGHBOURS is: 0.26263528138528136
 features:  9
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 75 NEIGHBOURS is: 0.15476190476190488
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 75 NEIGHBOURS is: 0.3246753246753247
 features:  10
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 75 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 75 NEIGHBOURS is: 0.3222943722943723
 features:  11
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 75 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 75 NEIGHBOURS is: 0.26601731601731593
 neighbours:  100
 features:  1
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 100 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 100 NEIGHBOURS is: 0.0
 features:  2
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 100 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 100 NEIGHBOURS is: 0.03722943722943728
 features:  3
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 100 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 100 NEIGHBOURS is: 0.07665043290043283
 features:  4
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 100 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 100 NEIGHBOURS is: 0.2633387445887445
 features:  5
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 100 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 100 NEIGHBOURS is: 0.2649891774891776
 features:  6
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 100 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 100 NEIGHBOURS is: 0.2542748917748918
 features:  7
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 100 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 100 NEIGHBOURS is: 0.23717532467532454
 features:  8
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 100 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 100 NEIGHBOURS is: 0.26263528138528136
 features:  9
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 100 NEIGHBOURS is: 0.15476190476190488
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 100 NEIGHBOURS is: 0.3246753246753247
 features:  10
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 100 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 100 NEIGHBOURS is: 0.3222943722943723
 features:  11
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 100 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 100 NEIGHBOURS is: 0.26601731601731593
 neighbours:  125
 features:  1
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 125 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 125 NEIGHBOURS is: 0.0
 features:  2
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 125 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 125 NEIGHBOURS is: 0.03722943722943728
 features:  3
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 125 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 125 NEIGHBOURS is: 0.07665043290043283
 features:  4
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 125 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 125 NEIGHBOURS is: 0.2633387445887445
 features:  5
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 125 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 125 NEIGHBOURS is: 0.2649891774891776
 features:  6
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 125 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 125 NEIGHBOURS is: 0.2542748917748918
 features:  7
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 125 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 125 NEIGHBOURS is: 0.23717532467532454
 features:  8
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 125 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 125 NEIGHBOURS is: 0.26263528138528136
 features:  9
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 125 NEIGHBOURS is: 0.15476190476190488
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 125 NEIGHBOURS is: 0.3246753246753247
 features:  10
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 125 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 125 NEIGHBOURS is: 0.3222943722943723
 features:  11
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 125 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 125 NEIGHBOURS is: 0.26601731601731593
 neighbours:  150
 features:  1
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 150 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 1 FEATURES and 150 NEIGHBOURS is: 0.0
 features:  2
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 150 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 2 FEATURES and 150 NEIGHBOURS is: 0.03722943722943728
 features:  3
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 150 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 3 FEATURES and 150 NEIGHBOURS is: 0.07665043290043283
 features:  4
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 150 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 4 FEATURES and 150 NEIGHBOURS is: 0.2633387445887445
 features:  5
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 150 NEIGHBOURS is: 0.1473214285714286
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 5 FEATURES and 150 NEIGHBOURS is: 0.2649891774891776
 features:  6
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 150 NEIGHBOURS is: 0.1517857142857143
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 6 FEATURES and 150 NEIGHBOURS is: 0.2542748917748918
 features:  7
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 150 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 7 FEATURES and 150 NEIGHBOURS is: 0.23717532467532454
 features:  8
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 150 NEIGHBOURS is: 0.15922619047619058
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 8 FEATURES and 150 NEIGHBOURS is: 0.26263528138528136
 features:  9
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 150 NEIGHBOURS is: 0.15476190476190488
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 9 FEATURES and 150 NEIGHBOURS is: 0.3246753246753247
 features:  10
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 150 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 10 FEATURES and 150 NEIGHBOURS is: 0.3222943722943723
 features:  11
-Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 150 NEIGHBOURS is: 0.16666666666666663
+Quality of dataset: datasets/grades/online_2020-2021_SDA_FP.txt with 11 FEATURES and 150 NEIGHBOURS is: 0.26601731601731593
 
 Process finished with exit code 0

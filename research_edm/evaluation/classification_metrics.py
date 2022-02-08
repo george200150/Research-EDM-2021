@@ -11,31 +11,40 @@ def distance(p1, p2):  # n-D euclidean distance
 
 
 def get_min_nn(target_grade, nns):
-    min_stud = None
-    min_stud_non_target = None
-    for nn in nns:
-        if min_stud is None or nn[1] < min_stud[1]:  # [0: label, 1: distance]
-            if nn[0] == target_grade:
-                min_stud = nn
+    best_nn = nns[0]  # choose the first available nn
+    for nn in nns[1:]:
+        if nn[1] <= best_nn[1]:  # [0: label, 1: distance]
+            if nn[1] < best_nn[1]:  # found smaller distance => update best-nn
+                best_nn = nn
             else:
-                min_stud_non_target = nn
-    if min_stud_non_target is None:
-        return min_stud
-    if min_stud is None:
-        return min_stud_non_target
-    if min_stud_non_target[1] <= min_stud[1]:  # always favour increasing the difficulty (grade of student != "g")
-        return min_stud_non_target
-    return min_stud
+                if nn[1] == best_nn[1] and target_grade != nn[0]:  # found a difficult student; update
+                    best_nn = nn  # always favour increasing the difficulty (grade of student != "g")
+                # don't update neighbor students already having final grade "g" (we want only difficult ones -> ~= "g")
+        # no closer neighbor found
+
+    # only for debugging reasons (to be noted that a simple sort is not enough to satisfy function requirements)
+    # nns = sorted(nns, key=lambda x: (x[1], x[0]))
+    # best_nn2 = nns[0]
+    # try:
+    #     assert best_nn2[0] == best_nn[0] and best_nn2[1] == best_nn[1]
+    # except AssertionError:
+    #     print(f"Difference noted (not a bug necessarily): target = {target_grade}, sort_nn = {best_nn2[0]},"
+    #           f"actual_nn = {best_nn[0]}, different_g = {target_grade != best_nn[0]}, "
+    #           f"is_dist_eq = {best_nn2[1] == best_nn[1]}")
+
+    return best_nn
 
 
-def get_nn(feat, labels, features):
+def get_nn(student, students):
+    student_final_grade, student_idx, student_features = student
     nns = []
-    for lab, feat_r in zip(labels, features):
-        if feat[0] == feat_r[0]:  # avoid identical students
+    for label, indx, feat_r in students:
+        if student_idx == indx:  # avoid identical students
             continue
-        nns.append([lab, distance(feat[1:], feat_r[1:])])
-    clossest_nn = get_min_nn(feat[0], nns)
-    return clossest_nn[0]  # return the grade of the closest neighbour
+        neighbor = [label, distance(student_features, feat_r)]
+        nns.append(neighbor)
+    clossest_nn = get_min_nn(student_final_grade, nns)
+    return clossest_nn[0]  # return the grade of the closest neighbor
 
 
 def diff(g, labels, features):
@@ -43,15 +52,15 @@ def diff(g, labels, features):
 
     @param g: grade - integer
     """
-    indx = np.expand_dims(np.asarray([x for x in range(len(features))]), 1)  # uniquely identify each student
-    features = np.concatenate((indx, features), axis=1)
+    indices = list([x for x in range(len(features))])  # uniquely identify each student
 
+    students = list(zip(labels, indices, features))
     n = 0
     counter = 0
-    for result, grades in zip(labels, features):
-        if int(result) != g:
+    for student in students:
+        if student[0] != g:
             continue
-        if int(get_nn(grades, labels, features)) != g:  # #(st_g not g_nn)
+        if get_nn(student, students) != g:  # #(st_g not g_nn)
             counter += 1  # #st_g
         n += 1
     return counter / n  # ratio of students with grade "g" => #(st_g not g_nn) / #st_g
@@ -67,8 +76,9 @@ def sum_diff(st, a):
 def get_quality_metrix(st, a):
     """Inversely proportional to the average of the grades' difficulty.
 
-    @param st: labels set - numpy ndarray of dimension (n,a,1)  # TODO: check dims
-    @param a: feature set - numpy ndarray of dimension (a,1)
+    @param st: labels set - numpy ndarray of dimension (n,a)
+    @param a: feature set - numpy ndarray of dimension (a,)
     """
     # QF(A,St) = 1 − frac(∑(g=4..10)(diff(g,St,A)),7)
+    st = [int(x) for x in st]  # integer labels (comparable grades)
     return 1 - sum_diff(st, a) / 7
