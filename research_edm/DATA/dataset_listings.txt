@@ -1,8 +1,3 @@
-datasets/grades/online_2020-2021.txt
-datasets/grades/online_2020-2021_FP.txt
-datasets/grades/online_2020-2021_SDA.txt
-datasets/grades/online_2020-2021_SDA_FP.txt
-datasets/grades/traditional_2018-2020.txt
-datasets/grades/traditional_2018-2020_FP.txt
-datasets/grades/traditional_2018-2020_SDA.txt
-datasets/grades/traditional_2018-2020_SDA_FP.txt
+datasets/new/traditional_only_FP.txt
+datasets/new/traditional_only_SDA.txt
+datasets/new/traditional_only_FP_SDA.txt

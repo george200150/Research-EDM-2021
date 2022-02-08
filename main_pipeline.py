@@ -30,7 +30,7 @@ def main_pipeline_unsupervised(no_classes, preprocessings, normalisation, savefi
     preprocessings = map_preproc_str_to_function(preprocessings)
     wrap_preprocs = [Wrap(x) for x in preprocessings]
     for fun in wrap_preprocs:
-        results_paths = main_cluster(fun, normalisation, savefig,
+        results_paths = main_cluster(no_classes, fun, normalisation, savefig,
                                      fresh_start, active_unsupervised_models, unsupervised_models_configs)
         main_evaluation(no_classes, results_paths, "unsupervised")
 
