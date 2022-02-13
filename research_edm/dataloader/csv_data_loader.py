@@ -1,8 +1,8 @@
-from research_edm.normalisation.postprocessing import Wrap, identic
+from research_edm.normalisation.postprocessing import default_t
 
 
 class CsvDataLoader:
-    def __init__(self, data_file, transform=Wrap(identic), mean=None, stdev=None, normalise=False, num_images=None):
+    def __init__(self, data_file, transform=default_t, mean=None, stdev=None, normalise=False, num_images=None):
         csv = open(data_file)
         lines = csv.readlines()
         self.data_size = len(lines) - 1

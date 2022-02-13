@@ -26,6 +26,21 @@ class Wrap:
         else:
             return self.f(x)
 
-# transform = Wrap(log)
-# transform = Wrap(asinh)
-# transform = Wrap(identic)
+
+class Log(Wrap):
+    def __init__(self):
+        super(Log, self).__init__(log)
+
+
+class Asinh(Wrap):
+    def __init__(self):
+        super(Asinh, self).__init__(asinh)
+
+
+class Identic(Wrap):
+    def __init__(self):
+        super(Identic, self).__init__(identic)
+
+
+preprocessings_listing = [Log(), Asinh(), Identic()]  # could be singleton
+default_t = Identic()

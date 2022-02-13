@@ -11,7 +11,7 @@ from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.evaluation.classification_metrics import get_quality_metrix
 from research_edm.inference.model_instantiation import parse_cluster_params, instantiate_clustering_dryrun
 from research_edm.io.pickle_io import get_mean_std, dump_data
-from research_edm.normalisation.postprocessing import identic, Wrap
+from research_edm.normalisation.postprocessing import default_t
 
 
 def plot_my_data(clusterings, clustering_names, color_scheme, dset_name, fresh_start, given_labels, savefig, title, transform,
@@ -112,7 +112,7 @@ def main_cluster(no_classes, transform, normalisation, savefig, fresh_start, act
 
 
 if __name__ == '__main__':
-    paths = main_cluster(7, Wrap(identic), True, False, False, None, None)
-    # paths = main_cluster(5, Wrap(identic), True, False, False, None, None)
-    # paths = main_cluster(2, Wrap(identic), True, False, False, None, None)
+    paths = main_cluster(7, default_t, True, False, False, None, None)
+    # paths = main_cluster(5, default_t, True, False, False, None, None)
+    # paths = main_cluster(2, default_t, True, False, False, None, None)
     print(paths)

@@ -5,7 +5,7 @@ from research_edm.clustering.visualization import visualize_3d_clustering, gener
 from research_edm.configs.paths import dataset_listings_path, dset_mean_stdev_dump_base, datasets_base_path
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.io.pickle_io import get_mean_std
-from research_edm.normalisation.postprocessing import Wrap, identic
+from research_edm.normalisation.postprocessing import default_t
 
 import matplotlib as mpl
 
@@ -26,7 +26,7 @@ def main_visualization(no_classes):
     datasets = [x.strip() for x in ds_fd.readlines()]
 
     feature_indices_list = [[0, 1, 2], [1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7], [6, 7, 8]]
-    transform = Wrap(identic)
+    transform = default_t
     norm_flag = False
 
     for dataset in datasets:

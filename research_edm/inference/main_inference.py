@@ -10,7 +10,7 @@ from research_edm.configs.paths import mapping_dump_base, dset_mean_stdev_dump_b
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.inference.model_instantiation import instantiate_default_dryrun, parse_ctor_params, cls_task
 from research_edm.io.pickle_io import get_mean_std, dump_data, get_mask, get_labels_mapping
-from research_edm.normalisation.postprocessing import Wrap, identic
+from research_edm.normalisation.postprocessing import default_t
 
 
 def train_test_split(features, test_size=0.1, slice=0):  # lists received by this function have already been shuffled
@@ -101,9 +101,9 @@ def main_inference(no_classes, active_models, classifiers_configs, transform, no
 
 
 if __name__ == '__main__':
-    # paths = main_inference(None, None, Wrap(identic), norm_flag=False)
-    paths = main_inference(2, None, None, Wrap(identic), norm_flag=True)
-    # paths = main_inference(5, None, None, Wrap(identic), norm_flag=True)
-    # paths = main_inference(7, None, None, Wrap(identic), norm_flag=True)
+    # paths = main_inference(None, None, default_t, norm_flag=False)
+    paths = main_inference(2, None, None, default_t, norm_flag=True)
+    # paths = main_inference(5, None, None, default_t, norm_flag=True)
+    # paths = main_inference(7, None, None, default_t, norm_flag=True)
 
     print(paths)

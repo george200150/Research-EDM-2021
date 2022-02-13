@@ -14,7 +14,7 @@ from research_edm.inference.generate_dataset_shuffle_masks import main_generate_
 from research_edm.inference.main_inference import main_inference
 from research_edm.io.pickle_io import dump_data, get_paths_list
 from research_edm.normalisation.main_get_mean_stdev import main_norm
-from research_edm.normalisation.postprocessing import Wrap, identic, asinh, log
+from research_edm.normalisation.postprocessing import preprocessings_listing, default_t
 
 
 def fix_random_seeds():
@@ -28,8 +28,7 @@ def main_pipeline_unsupervised(no_classes, preprocessings, normalisation, savefi
     fix_random_seeds()
 
     preprocessings = map_preproc_str_to_function(preprocessings)
-    wrap_preprocs = [Wrap(x) for x in preprocessings]
-    for fun in wrap_preprocs:
+    for fun in preprocessings:
         results_paths = main_cluster(no_classes, fun, normalisation, savefig,
                                      fresh_start, active_unsupervised_models, unsupervised_models_configs)
         main_evaluation(no_classes, results_paths, "unsupervised")
@@ -43,9 +42,7 @@ def main_pipeline_supervised_FIRST_RUN_ONLY(no_classes, preprocessings, normalis
     main_generate_mappings()
 
     preprocessings = map_preproc_str_to_function(preprocessings)
-
-    wrap_preprocs = [Wrap(x) for x in preprocessings]
-    for fun in wrap_preprocs:
+    for fun in preprocessings:
         results_paths = main_inference(no_classes, active_models, models_configs, fun, norm_flag=normalisation)
         dump_data(results_paths, os.path.join(results_paths_dump_base, paths_filename))
         # The only implemented normalisation is: (x - mean) / stdev (May also consider min-max norm).
@@ -53,16 +50,11 @@ def main_pipeline_supervised_FIRST_RUN_ONLY(no_classes, preprocessings, normalis
             main_evaluation(no_classes, paths_to_models, "supervised")
 
 
-def map_preproc_str_to_function(preprocessings):
+def map_preproc_str_to_function(preprocs):
     res = []
-    for preproc in preprocessings:
-        if preproc == 'asinh':
-            res.append(asinh)
-        if preproc == 'identic':
-            res.append(identic)
-        if preproc == 'log':
-            res.append(log)
-
+    for preproc in preprocessings_listing:
+        if preproc.name in preprocs:
+            res.append(preproc)
     return res
 
 
@@ -70,9 +62,7 @@ def main_pipeline_supervised_TRAIN_OVERWRITE(no_classes, preprocessings, normali
     fix_random_seeds()
 
     preprocessings = map_preproc_str_to_function(preprocessings)
-
-    wrap_preprocs = [Wrap(x) for x in preprocessings]
-    for fun in wrap_preprocs:
+    for fun in preprocessings:
         results_paths = main_inference(no_classes, active_models, models_configs, fun, norm_flag=normalisation)
         dump_data(results_paths, os.path.join(results_paths_dump_base, paths_filename))
 
@@ -87,7 +77,7 @@ def get_qualities():
     for dset in datasets:
         features, labels = get_features_labels(
             data_file=os.path.join(datasets_base_path, dset),
-            transform=Wrap(identic),
+            transform=default_t,
             mean=None,
             stdev=None,
             normalise=False,
@@ -144,7 +134,7 @@ if __name__ == '__main__':
     no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs, savefig, \
     fresh_start, active_unsupervised_models, unsupervised_models_configs = read_parsed_yml()
 
-    # main_pipeline_supervised_FIRST_RUN_ONLY(no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs)
+    main_pipeline_supervised_FIRST_RUN_ONLY(no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs)
     # creates randomly generated masks, that are consistent cross-experiment
 
     # main_pipeline_supervised_TRAIN_OVERWRITE(no_classes, preprocessings, normalisation, active_supervised_models, supervised_models_configs)
@@ -153,4 +143,4 @@ if __name__ == '__main__':
     # main_pipeline_supervised_ONLY_EVAL(no_classes)
     # evaluates the already trained classifiers (double checking only)
 
-    main_pipeline_unsupervised(no_classes, preprocessings, normalisation, savefig, fresh_start, active_unsupervised_models, unsupervised_models_configs)
+    # main_pipeline_unsupervised(no_classes, preprocessings, normalisation, savefig, fresh_start, active_unsupervised_models, unsupervised_models_configs)

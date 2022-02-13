@@ -9,7 +9,7 @@ from research_edm.configs.paths import mask_dump_base, dset_mean_stdev_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.evaluation.classification_metrics import get_quality_metrix
 from research_edm.io.pickle_io import get_mean_std, get_mask
-from research_edm.normalisation.postprocessing import Wrap, identic
+from research_edm.normalisation.postprocessing import default_t
 
 ds_fd = open(dataset_listings_path, "r")
 datasets = [x.strip() for x in ds_fd.readlines()]
@@ -18,7 +18,7 @@ paths = []
 # dset = datasets[0]  # TODO: change dataset manually
 dset = datasets[1]
 
-transform = Wrap(identic)
+transform = default_t
 norm_flag = False
 
 dset_name = dset.split("/")[-1].split(".")[0]

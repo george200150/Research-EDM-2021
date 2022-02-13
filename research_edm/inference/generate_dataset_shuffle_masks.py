@@ -5,7 +5,7 @@ from tqdm import tqdm
 from research_edm.DATA.class_mapping import get_data_type
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.io.pickle_io import dump_data, get_mask
-from research_edm.normalisation.postprocessing import Wrap, identic
+from research_edm.normalisation.postprocessing import default_t
 from research_edm.configs.paths import datasets_base_path, mask_dump_base, dataset_listings_path
 
 
@@ -15,7 +15,7 @@ def get_shuffle_mask(dset):
 
     _, labels = get_features_labels(
         data_file=os.path.join(datasets_base_path, dset),
-        transform=Wrap(identic),
+        transform=default_t,
         mean=None,
         stdev=None,
         normalise=False,
@@ -47,7 +47,7 @@ def test_shuffle_data():
 
     features, labels = get_features_labels(
         data_file=os.path.join(datasets_base_path, dset),
-        transform=Wrap(identic),
+        transform=default_t,
         mean=None,
         stdev=None,
         normalise=False,

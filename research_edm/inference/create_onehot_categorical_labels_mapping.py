@@ -6,7 +6,7 @@ from research_edm.DATA.class_mapping import get_data_type
 from research_edm.configs.paths import dataset_listings_path, datasets_base_path, mapping_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.io.pickle_io import dump_data
-from research_edm.normalisation.postprocessing import Wrap, identic
+from research_edm.normalisation.postprocessing import default_t
 
 
 def main_generate_mappings():
@@ -23,7 +23,7 @@ def get_mapping(dset):
 
     _, labels = get_features_labels(
         data_file=os.path.join(datasets_base_path, dset),
-        transform=Wrap(identic),
+        transform=default_t,
         mean=None,
         stdev=None,
         normalise=False,
