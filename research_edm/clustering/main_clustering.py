@@ -14,10 +14,10 @@ from research_edm.io.pickle_io import get_mean_std, dump_data
 from research_edm.normalisation.postprocessing import identic, Wrap
 
 
-def plot_my_data(clusterings, color_scheme, dset_name, fresh_start, given_labels, savefig, title, transform,
+def plot_my_data(clusterings, clustering_names, color_scheme, dset_name, fresh_start, given_labels, savefig, title, transform,
                  wrapped_models):
-    plts = [visualize_3d_clustering(clustering, given_labels, title=title, colors_per_class=color_scheme,
-                                    savefig=savefig) for clustering in clusterings]
+    plts = [visualize_3d_clustering(clustering, given_labels, title=c_name + " " + title, colors_per_class=color_scheme,
+                                    savefig=savefig) for clustering, c_name in zip(clusterings, clustering_names)]
     plot_paths = [os.path.join(plot_dump_base, transform.name, dset_name + wrapped_model.png_name) for
                   wrapped_model in wrapped_models]
     if fresh_start:
@@ -69,8 +69,9 @@ def cluster_dataset(no_classes, dset, transform, normalisation, savefig, fresh_s
         wrapped_model.set_pkl_ending(transform, normalisation)
 
     clusterings = [wrapped_model.model.fit_transform(features) for wrapped_model in wrapped_models]
-    plot_my_data(clusterings, color_scheme, dset_name, fresh_start, labels, savefig, title + " Ground Truth",
-                 transform, wrapped_models)
+    clustering_names = [wrapped_model.name for wrapped_model in wrapped_models]
+    plot_my_data(clusterings, clustering_names, color_scheme, dset_name, fresh_start, labels, savefig,
+                 title + " Ground Truth", transform, wrapped_models)
 
     kmeans_labels = KMeans(n_clusters=no_cls).fit_predict(features)
 
@@ -94,8 +95,8 @@ def cluster_dataset(no_classes, dset, transform, normalisation, savefig, fresh_s
         print(f"[INFO]: For dataset {dset} and clustering {indx}, the quality is the following: "
               f"{get_quality_metrix(st=labels, a=clustering)}")
 
-    plot_my_data(clusterings, color_scheme, dset_name, fresh_start, kmeans_labels, savefig, title + " K-Means",
-                 transform, wrapped_models)
+    plot_my_data(clusterings, clustering_names, color_scheme, dset_name, fresh_start, kmeans_labels, savefig,
+                 title + " K-Means", transform, wrapped_models)
 
     return paths
 
