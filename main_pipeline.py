@@ -5,7 +5,7 @@ import yaml
 
 from research_edm.clustering.main_clustering import main_cluster
 from research_edm.configs.paths import results_paths_dump_base, paths_filename, datasets_base_path, \
-    dataset_listings_path
+    dataset_listings_path, reserved_model_names_path
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.evaluation.classification_metrics import get_quality_metrix
 from research_edm.evaluation.main_evaluation import main_evaluation
@@ -133,9 +133,18 @@ def read_parsed_yml():
         fresh_start, active_unsupervised_models, unsupervised_models_configs
 
 
+def get_model_underscore_names(cls_conf, reg_conf):
+    names = list(cls_conf.keys())
+    names += list(reg_conf.keys())
+    return ["_" + x for x in names]
+
+
 if __name__ == '__main__':
     no_classes, preprocs, normalisation, active_sup, sup_cls_cf, sup_reg_cf, savefig, fresh_start, \
-    active_unsup, unsup_cf = read_parsed_yml()
+        active_unsup, unsup_cf = read_parsed_yml()
+
+    # underscore_models_names = get_model_underscore_names(sup_cls_cf, sup_reg_cf)
+    # dump_data(underscore_models_names, reserved_model_names_path)  # unnecessary overwriting...
 
     # main_pipeline_supervised_FIRST_RUN_ONLY(no_classes, preprocs, normalisation, active_sup, sup_cls_cf, sup_reg_cf)
     # creates randomly generated masks, that are consistent cross-experiment

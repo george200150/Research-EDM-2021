@@ -6,11 +6,12 @@ from tqdm import tqdm
 
 from research_edm.DATA.class_mapping import unmap_category, get_data_type, grades_type, get_data_type_of_dataset, \
     map_category, classes_categories_7, classes_categories_5, classes_categories_2
-from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base
+from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base, reserved_model_names_path
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
 from research_edm.evaluation.xslx_metrics import get_overall_accuracy, get_overall_non_acc_metric
-from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping
+from research_edm.io.pickle_io import get_clustering, get_ready_for_eval, get_labels_mapping, get_paths_list
+from research_edm.normalisation.postprocessing import underscore_preprocs_names
 
 
 def division_check(nom, denom):
@@ -183,7 +184,7 @@ def export_metrics_unsupervised(no_classes, xs, preds, gts, result_file):
     if get_data_type_of_dataset(no_classes, gts) == grades_type:
         gts = list([int(y) for y in gts])
     else:
-        gts = list([map_category(no_classes, y) for y in gts])  # TODO: changed implementation
+        gts = list([map_category(no_classes, y) for y in gts])
 
     workbook = xlsxwriter.Workbook(result_file)
     worksheet = workbook.add_worksheet()
@@ -239,6 +240,20 @@ def export_metrics_unsupervised(no_classes, xs, preds, gts, result_file):
     workbook.close()
 
 
+def get_all_reserved_words():
+    reserved_words = ["_norm"]
+    reserved_words += underscore_preprocs_names
+    reserved_words += get_paths_list(reserved_model_names_path)
+    return reserved_words
+
+
+def reduce_dset_name(dset_name, reserved_words):
+    for word in reserved_words:
+        if word in dset_name:
+            dset_name = "".join(dset_name.split(word))
+    return dset_name
+
+
 def main_evaluation(no_classes, results_paths, learning):
     for path in results_paths:
         pre_name, dset_pkl = path.split(os.path.sep)[-2:]
@@ -246,7 +261,7 @@ def main_evaluation(no_classes, results_paths, learning):
         data_type = get_data_type(dset_name)
 
         # remap the labels for the desired evaluation configuration
-        # TODO: for now, all models are trained on 7 integer label classes, then evaluated on 7/5 classes, as desired.
+        # All models are trained on 7 integer label classes, then evaluated on 7/5 classes, as desired.
         if no_classes == 2:
             classes = classes_categories_2
         elif no_classes == 5:
@@ -258,11 +273,13 @@ def main_evaluation(no_classes, results_paths, learning):
 
         dump_xlsx_file = os.path.join(base_dump_xlxs, learning, data_type, pre_name, dset_name + str(no_classes) + ".xlsx")
 
+        result_path = os.path.sep.join(dump_xlsx_file.split(os.path.sep)[:-1])
+        if not os.path.exists(result_path):
+            os.makedirs(result_path)
+
         if learning == "supervised":
-            for word in ["_asinh", "_identic", "_log", "_norm", "_MLPClassifier", "_CategoricalNB",
-                         "_LogisticRegression", "_SGDRegressor", "_TweedieRegressor", "_Poly"]:  # TODO: not open-closed
-                if word in dset_name:
-                    dset_name = "".join(dset_name.split(word))
+            reserved_words = get_all_reserved_words()
+            dset_name = reduce_dset_name(dset_name, reserved_words)
             lb = get_labels_mapping(os.path.join(mapping_dump_base, data_type, dset_name + ".pkl"))
             ready_for_eval = get_ready_for_eval(path)
             export_metrics_supervised(no_classes, ready_for_eval, classes, lb, dump_xlsx_file)

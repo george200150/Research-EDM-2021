@@ -1,4 +1,4 @@
-classes_grades = [4, 5, 6, 7, 8, 9, 10]
+classes_grades = [4, 5, 6, 7, 8, 9, 10]  # TODO: create yml config for ground truth class and remappings
 
 classes_categories_2 = ["P", "F"]
 classes_categories_4 = ["E", "G", "S", "F"]
@@ -24,9 +24,9 @@ grades_type = "grades"
 categories_type = "categories"
 
 
-def get_data_type_of_dataset(no_classes, labels):
+def get_data_type_of_dataset(no_classes, labels):  # TODO: parametrise the strategy; create a listing of partitions
     if no_classes == 7:  # grades
-        classes_categories = classes_categories_7
+        classes_categories = classes_categories_7  # TODO: for each partition, assign a lambda mapping function (in yml)
     elif no_classes == 5:  # E V G S F
         classes_categories = classes_categories_5
     elif no_classes == 2:  # P F
@@ -42,7 +42,7 @@ def get_data_type_of_dataset(no_classes, labels):
     raise ValueError("No labels found!")
 
 
-def get_data_type(dset_name):
+def get_data_type(dset_name):  # TODO: parametrise this; make it format-invariant
     if "note" in dset_name:
         return grades_type
     elif "categorii" in dset_name:

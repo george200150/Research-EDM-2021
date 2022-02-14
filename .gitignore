@@ -10,3 +10,4 @@ research_edm/evaluation/results/
 research_edm/clustering/clustering_dump/
 research_edm/clustering/plot_dump/
 results_paths_dump/
+research_edm/evaluation/results/*

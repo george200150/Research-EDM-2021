@@ -43,4 +43,5 @@ class Identic(Wrap):
 
 
 preprocessings_listing = [Log(), Asinh(), Identic()]  # could be singleton
+underscore_preprocs_names = ["_" + x.name for x in preprocessings_listing]
 default_t = Identic()

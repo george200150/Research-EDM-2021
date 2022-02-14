@@ -6,6 +6,7 @@ path_to_project = r"C:\Users\George\PycharmProjects\Research-EDM-2021"
 
 
 results_paths_dump_base = os.path.join(path_to_project, r"results_paths_dump")
+reserved_model_names_path = os.path.join(results_paths_dump_base, r"reserved_models.pkl")
 
 datasets_base_path = os.path.join(path_to_project, r"research_edm\DATA")
 dataset_listings_path = os.path.join(path_to_project, r"research_edm\DATA\dataset_listings.txt")
