@@ -14,8 +14,8 @@ from research_edm.io.pickle_io import get_mean_std, dump_data
 from research_edm.normalisation.postprocessing import default_t
 
 
-def plot_my_data(clusterings, clustering_names, color_scheme, dset_name, fresh_start, given_labels, savefig, title, transform,
-                 wrapped_models):
+def plot_my_data(clusterings, clustering_names, color_scheme, dset_name, fresh_start, given_labels, savefig, title,
+                 transform, wrapped_models):
     plts = [visualize_3d_clustering(clustering, given_labels, title=c_name + " " + title, colors_per_class=color_scheme,
                                     savefig=savefig) for clustering, c_name in zip(clusterings, clustering_names)]
     plot_paths = [os.path.join(plot_dump_base, transform.name, dset_name + wrapped_model.png_name) for

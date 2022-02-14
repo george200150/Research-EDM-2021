@@ -1,5 +1,3 @@
-import ast
-
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression, SGDRegressor, TweedieRegressor, LinearRegression
@@ -70,22 +68,21 @@ def parse_cluster_params(models_configs, active_models):
     return get_active_models(models, active_models)
 
 
-def parse_ctor_params(models_configs, active_models):
-    poly_config = models_configs['Poly']  # TODO: exception - would need to implement list and other recursion stuff
-    # TODO: eval('Pipeline')(recursive_instantiation(params))... weird
+def parse_ctor_params(cls_cf, reg_cf, active_models):
     models = []
 
-    for klass_name, value_config in list(models_configs.items())[:3]:
+    for klass_name, value_config in list(cls_cf.items()):
         klass = globals()[klass_name]
         models.append(ModelWrapper(klass(**value_config), klass_name, task_type=cls_task))
 
-    for klass_name, value_config in list(models_configs.items())[3:-1]:  # TODO: temp fix - there is no yml[cls & reg]
+    for klass_name, value_config in list(reg_cf.items())[:-1]:  # Poly is different
         klass = globals()[klass_name]
         models.append(ModelWrapper(klass(**value_config), klass_name, task_type=reg_task))
 
-    poly = Pipeline([  # TODO: need additional care...
+    poly_config = reg_cf['Poly']  # TODO: need additional care...
+    poly = Pipeline([
         ('Poly', PolynomialFeatures(**poly_config)),
         ('Linear', LinearRegression(fit_intercept=False))])
     models.append(ModelWrapper(poly, 'Poly', reg_task))
 
-    return get_active_models(models, active_models)  # TODO: this wraps the models
+    return get_active_models(models, active_models)

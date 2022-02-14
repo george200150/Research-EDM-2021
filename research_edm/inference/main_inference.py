@@ -1,7 +1,6 @@
 import os
 
 import numpy as np
-# from sklearn.model_selection import train_test_split
 from tqdm import tqdm
 
 from research_edm.DATA.class_mapping import get_data_type
@@ -31,6 +30,7 @@ def cross_train_model(no_classes, wrapped_model, features, labels, test_size):
             # TODO: at the moment, the framework does not support training of different gt label mappings (only eval)
             # further implementations would use a remapping of the gt labels, considering no_classes
             wrapped_model.model = wrapped_model.model.fit(x_train, y_train)
+            # TODO: naive_bayes - ValueError: y should be a 1d array, got an array of shape (151, 7) instead.
         else:  # regression models must be trained only on the integer labels
             y_train = list([float(x) for x in y_train])
             y_test = list([float(x) for x in y_test])
@@ -40,7 +40,7 @@ def cross_train_model(no_classes, wrapped_model, features, labels, test_size):
     return ready_for_eval
 
 
-def infer_dataset(no_classes, active_models, models_configs, dset, transform, norm_flag):
+def infer_dataset(no_classes, active_models, cls_cf, reg_cf, dset, transform, norm_flag):
     dset_name = dset.split("/")[-1].split(".")[0]
     data_type = get_data_type(dset_name)
     mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
@@ -67,7 +67,7 @@ def infer_dataset(no_classes, active_models, models_configs, dset, transform, no
     if active_models is None or len(active_models) == 0:
         wrapped_models = instantiate_default_dryrun()
     else:
-        wrapped_models = parse_ctor_params(models_configs, active_models)  # TODO: not open-closed
+        wrapped_models = parse_ctor_params(cls_cf, reg_cf, active_models)
 
     paths = []
     for wrapped_model in wrapped_models:
@@ -89,13 +89,13 @@ def infer_dataset(no_classes, active_models, models_configs, dset, transform, no
     return paths
 
 
-def main_inference(no_classes, active_models, classifiers_configs, transform, norm_flag):
+def main_inference(no_classes, active_models, cls_cf, reg_cf, transform, norm_flag):
     ds_fd = open(dataset_listings_path, "r")
     datasets = [x.strip() for x in ds_fd.readlines()]
 
     paths = []
     for dataset in datasets:
-        path = infer_dataset(no_classes, active_models, classifiers_configs, dataset, transform, norm_flag)
+        path = infer_dataset(no_classes, active_models, cls_cf, reg_cf, dataset, transform, norm_flag)
         paths.append(path)
     return paths
 

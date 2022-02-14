@@ -258,8 +258,9 @@ def main_evaluation(no_classes, results_paths, learning):
 
         dump_xlsx_file = os.path.join(base_dump_xlxs, learning, data_type, pre_name, dset_name + str(no_classes) + ".xlsx")
 
-        if learning == "supervised":  # principle open-closed not respected below...
-            for word in ["_asinh", "_identic", "_log", "_norm", "_mlp", "_nb", "_lr", "_sgdr", "_tr", "_poly"]:
+        if learning == "supervised":
+            for word in ["_asinh", "_identic", "_log", "_norm", "_MLPClassifier", "_CategoricalNB",
+                         "_LogisticRegression", "_SGDRegressor", "_TweedieRegressor", "_Poly"]:  # TODO: not open-closed
                 if word in dset_name:
                     dset_name = "".join(dset_name.split(word))
             lb = get_labels_mapping(os.path.join(mapping_dump_base, data_type, dset_name + ".pkl"))
@@ -272,40 +273,4 @@ def main_evaluation(no_classes, results_paths, learning):
 
 
 if __name__ == '__main__':
-    # base_path = 'C:\\Users\\George\\PycharmProjects\\Research-EDM-2021\\research_edm\\inference\\trained_classifiers\\'
-    base_path = 'C:\\Users\\George\\PycharmProjects\\Research-EDM-2021\\research_edm\\clustering\\clustering_dump\\'
-
-    # REGRESSION
-    # paths = [[os.path.join(base_path, 'grades\\identic\\En_plf_2019-2020_note_norm_identic_poly.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\En_plf_2020-2021_(online)_note_norm_identic_poly.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\plf_2019-2020_note_norm_identic_poly.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\plf_2020-2021_(online)_note_norm_identic_poly.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\En_plf_2019-2020_categorii_norm_identic_poly.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\En_plf_2020-2021_(online)_categorii_norm_identic_poly.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\plf_2019-2020_categorii_norm_identic_poly.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\plf_2020-2021_(online)_categorii_norm_identic_poly.pkl')]]
-
-    # NON-NORMALISED
-    # paths = [[os.path.join(base_path, 'grades\\identic\\En_plf_2019-2020_note_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\En_plf_2020-2021_(online)_note_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\plf_2019-2020_note_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'grades\\identic\\plf_2020-2021_(online)_note_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\En_plf_2019-2020_categorii_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\En_plf_2020-2021_(online)_categorii_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\plf_2019-2020_categorii_identic_mlp.pkl')],
-    #          [os.path.join(base_path, 'categories\\identic\\plf_2020-2021_(online)_categorii_identic_mlp.pkl')]]
-
-    paths = [[os.path.join(base_path, 'identic\\En_plf_2019-2020_note_norm_identic_umap.pkl')],
-             [os.path.join(base_path, 'identic\\En_plf_2020-2021_(online)_note_norm_identic_umap.pkl')],
-             [os.path.join(base_path, 'identic\\plf_2019-2020_note_norm_identic_umap.pkl')],
-             [os.path.join(base_path, 'identic\\plf_2020-2021_(online)_note_norm_identic_umap.pkl')],
-             [os.path.join(base_path, 'identic\\En_plf_2019-2020_categorii_norm_identic_umap.pkl')],
-             [os.path.join(base_path, 'identic\\En_plf_2020-2021_(online)_categorii_norm_identic_umap.pkl')],
-             [os.path.join(base_path, 'identic\\plf_2019-2020_categorii_norm_identic_umap.pkl')],
-             [os.path.join(base_path, 'identic\\plf_2020-2021_(online)_categorii_norm_identic_umap.pkl')]]
-
-    for paths_to_models in paths:
-        main_evaluation(2, paths_to_models, "unsupervised")
-        # main_evaluation(5, paths_to_models, "unsupervised")
-        # main_evaluation(7, paths_to_models, "unsupervised")
-        # main_evaluation(7, paths_to_models, "supervised")
+    pass
