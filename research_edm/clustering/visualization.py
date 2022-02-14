@@ -5,32 +5,6 @@ import matplotlib.pyplot as plt
 # mpl.use('TkAgg')  # for plotting in separate window
 
 
-def generate_colors_per_class_7cls():
-    colors = {'10': [0, 255, 0],
-              '9': [128, 128, 0],
-              '8': [255, 0, 0],
-              '7': [255, 101, 128],
-              '6': [255, 0, 255],
-              '5': [93, 144, 255],
-              '4': [0, 0, 159]}
-    return colors
-
-
-def generate_colors_per_class_5cls():
-    colors = {'E': [0, 0, 255],
-              'V': [0, 255, 255],
-              'G': [0, 255, 0],
-              'S': [255, 0, 255],
-              'F': [255, 0, 0]}
-    return colors
-
-
-def generate_colors_per_class_2cls():
-    colors = {'P': [0, 0, 255],
-              'F': [255, 0, 0]}
-    return colors
-
-
 # scale and move the coordinates so they fit [0; 1] range
 def scale_to_01_range(x):
     # compute the distribution range

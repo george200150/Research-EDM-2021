@@ -5,7 +5,7 @@ from sklearn.metrics import mean_squared_error
 from tqdm import tqdm
 
 from research_edm.DATA.class_mapping import unmap_category, get_data_type, grades_type, get_data_type_of_dataset, \
-    map_category, classes_categories_7, classes_categories_5, classes_categories_2
+    map_category, get_classes_by_number
 from research_edm.configs.paths import base_dump_xlxs, mapping_dump_base, reserved_model_names_path
 from research_edm.evaluation.classification_metrics import get_confusion_matrix
 from research_edm.evaluation.clustering_metrics import *
@@ -262,14 +262,7 @@ def main_evaluation(no_classes, results_paths, learning):
 
         # remap the labels for the desired evaluation configuration
         # All models are trained on 7 integer label classes, then evaluated on 7/5 classes, as desired.
-        if no_classes == 2:
-            classes = classes_categories_2
-        elif no_classes == 5:
-            classes = classes_categories_5
-        elif no_classes == 7:
-            classes = classes_categories_7
-        else:
-            raise ValueError("No such class mapping!")
+        classes = get_classes_by_number(no_classes)
 
         dump_xlsx_file = os.path.join(base_dump_xlxs, learning, data_type, pre_name, dset_name + str(no_classes) + ".xlsx")
 

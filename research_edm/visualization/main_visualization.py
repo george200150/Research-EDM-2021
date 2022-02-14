@@ -1,7 +1,7 @@
 import os
 
-from research_edm.clustering.visualization import visualize_3d_clustering, generate_colors_per_class_7cls, \
-    generate_colors_per_class_5cls, generate_colors_per_class_2cls
+from research_edm.DATA.class_mapping import get_palette
+from research_edm.clustering.visualization import visualize_3d_clustering
 from research_edm.configs.paths import dataset_listings_path, dset_mean_stdev_dump_base, datasets_base_path
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.io.pickle_io import get_mean_std
@@ -10,11 +10,6 @@ from research_edm.normalisation.postprocessing import default_t
 import matplotlib as mpl
 
 mpl.use('TkAgg')  # for plotting in separate window
-
-
-feature_names_per_class_7cls = []
-feature_names_per_class_5cls = []
-feature_names_per_class_2cls = []
 
 
 def select_features(features, indices):
@@ -30,17 +25,7 @@ def main_visualization(no_classes):
     norm_flag = False
 
     for dataset in datasets:
-        if no_classes == 7:  # grades
-            color_scheme = generate_colors_per_class_7cls()
-            feature_names = feature_names_per_class_7cls
-        elif no_classes == 5:  # E V G S F
-            color_scheme = generate_colors_per_class_5cls()
-            feature_names = feature_names_per_class_5cls
-        elif no_classes == 2:  # P F
-            color_scheme = generate_colors_per_class_2cls()
-            feature_names = feature_names_per_class_2cls
-        else:
-            raise ValueError("No such class mapping!")
+        color_scheme = get_palette(no_classes)
 
         dset_name = dataset.split("/")[-1].split(".")[0]
         mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
@@ -61,10 +46,7 @@ def main_visualization(no_classes):
                 .join([str(x) for x in feature_indices])
             x_points_sliced = select_features(features, feature_indices)
 
-            visualize_3d_clustering(x_points_sliced, y_gts, title, color_scheme, three_d=True, savefig=False,
-                                    x_label=feature_names[feature_indices[0]],
-                                    y_label=feature_names[feature_indices[1]],
-                                    z_label=feature_names[feature_indices[2]])
+            visualize_3d_clustering(x_points_sliced, y_gts, title, color_scheme, three_d=True, savefig=False)
 
 
 if __name__ == '__main__':

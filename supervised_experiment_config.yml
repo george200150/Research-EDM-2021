@@ -6,7 +6,8 @@ experiment:
     models:
 #      active: ['MLPClassifier', 'CategoricalNB', 'LogisticRegression', 'SGDRegressor', 'TweedieRegressor', 'Poly']
 #      active: ['MLPClassifier', 'CategoricalNB', 'LogisticRegression']
-      active: ['SGDRegressor', 'TweedieRegressor', 'Poly']
+#      active: ['SGDRegressor', 'TweedieRegressor', 'Poly']
+      active: ['Poly']
       configs:
         classification:
           MLPClassifier:

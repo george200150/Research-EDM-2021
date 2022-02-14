@@ -2,9 +2,8 @@ import os
 
 from sklearn.cluster import KMeans
 
-from research_edm.DATA.class_mapping import unmap_category, get_data_type, grades_type
-from research_edm.clustering.visualization import visualize_3d_clustering, generate_colors_per_class_7cls, \
-    generate_colors_per_class_5cls, generate_colors_per_class_2cls
+from research_edm.DATA.class_mapping import unmap_category, get_data_type, grades_type, get_palette
+from research_edm.clustering.visualization import visualize_3d_clustering
 from research_edm.configs.paths import dset_mean_stdev_dump_base, datasets_base_path, plot_dump_base, \
     dataset_listings_path, clustering_dump_base
 from research_edm.dataloader.feature_extractor import get_features_labels
@@ -31,17 +30,8 @@ def plot_my_data(clusterings, clustering_names, color_scheme, dset_name, fresh_s
 def cluster_dataset(no_classes, dset, transform, normalisation, savefig, fresh_start, active_models, models_configs):
     dset_name = dset.split("/")[-1].split(".")[0]
     mean_stdev_pkl_name = "{}_mean_stdev.pkl".format(dset_name)
-    if no_classes == 7:  # grades
-        color_scheme = generate_colors_per_class_7cls()
-        no_cls = no_classes
-    elif no_classes == 5:  # E V G S F
-        color_scheme = generate_colors_per_class_5cls()
-        no_cls = no_classes
-    elif no_classes == 2:  # P F
-        color_scheme = generate_colors_per_class_2cls()
-        no_cls = no_classes
-    else:
-        raise ValueError("No such class mapping!")
+    color_scheme = get_palette(no_classes)
+    no_cls = no_classes
 
     mean, stdev = get_mean_std(os.path.join(dset_mean_stdev_dump_base, mean_stdev_pkl_name))
 

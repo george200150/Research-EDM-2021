@@ -11,83 +11,71 @@ learning = labels['learning']
 mappings = labels['mappings']
 reverse_mappings = labels['reverse_mappings']
 
-classes_grades = learning['categories']
+learning_classes = learning['categories']
 
 
-obj_mapping_2 = mappings['mapping_2']
-obj_mapping_5 = mappings['mapping_5']
-obj_mapping_7 = mappings['mapping_7']
-
-classes_categories_2 = obj_mapping_2['categories']
-classes_categories_5 = obj_mapping_5['categories']
-classes_categories_7 = obj_mapping_7['categories']
-
-mapping_2 = obj_mapping_2['definition']
-mapping_5 = obj_mapping_5['definition']
-mapping_7 = obj_mapping_7['definition']
-
-
-obj_reverse_mapping_2 = reverse_mappings['reverse_mapping_2']
-obj_reverse_mapping_5 = reverse_mappings['reverse_mapping_5']
-obj_reverse_mapping_7 = reverse_mappings['reverse_mapping_7']
-
-reverse_mapping_2 = obj_reverse_mapping_2['definition']
-reverse_mapping_5 = obj_reverse_mapping_5['definition']
-reverse_mapping_7 = obj_reverse_mapping_7['definition']
-
-
+# learning and non-learning types
 grades_type = data_types['grades_type']['name']
 categories_type = data_types['categories_type']['name']
 
 
-def get_data_type_of_dataset(no_classes, labels):  # TODO: parametrise the strategy; create a listing of partitions
-    if no_classes == 7:  # grades
-        classes_categories = classes_categories_7  # TODO: for each partition, assign a lambda mapping function (in yml)
-    elif no_classes == 5:  # E V G S F
-        classes_categories = classes_categories_5
-    elif no_classes == 2:  # P F
-        classes_categories = classes_categories_2
-    else:
+def get_palette(no_classes):
+    for mapping in list(mappings.keys()):
+        mapping = mappings[mapping]
+        if no_classes == mapping['no_classes']:
+            return mapping['colors']
+    raise ValueError("No such color scheme!")
+
+
+def get_classes_by_number(no_classes):
+    for mapping in list(mappings.keys()):
+        mapping = mappings[mapping]
+        if no_classes == mapping['no_classes']:
+            return mapping['categories']
+    raise ValueError("No such class mapping!")
+
+
+def get_data_type_of_dataset(no_classes, labels):
+    classes_categories = None
+    for mapping in list(mappings.keys()):
+        mapping = mappings[mapping]
+        if no_classes == mapping['no_classes']:
+            classes_categories = mapping['definition']
+
+    if classes_categories is None:
         raise ValueError("No such class mapping!")
 
     for label in labels:
         if label in classes_categories:
             return categories_type
-        elif label in classes_grades:
+        elif label in learning_classes:
             return grades_type
     raise ValueError("No labels found!")
 
 
-def get_data_type(dset_name):  # TODO: use yml config
-    if "note" in dset_name:
-        return grades_type
-    elif "categorii" in dset_name:
-        return categories_type
-    elif "online_" in dset_name or "traditional_" in dset_name:
-        return grades_type
-    else:
-        raise ValueError("Dataset type not recognised!")
+def get_data_type(dset_name):
+    for data_type in list(data_types.keys()):
+        data_type = data_types[data_type]
+        for identifier in data_type['identification']:
+            if identifier in dset_name:
+                return data_type['name']
+    raise ValueError("Dataset type not recognised!")
 
 
-def map_category(no_classes, string_label):  # TODO: use yml config
-    if no_classes == 2:
-        return mapping_2[string_label]
-    if no_classes == 5:
-        return mapping_5[string_label]
-    if no_classes == 7:
-        return mapping_7[string_label]
+def map_category(no_classes, string_label):
+    for mapping in list(mappings.keys()):
+        mapping = mappings[mapping]
+        if no_classes == mapping['no_classes']:
+            return mapping['definition'][string_label]
     raise ValueError("No such class mapping!")
 
 
-def unmap_category(no_classes, integer_label):  # TODO: use yml config
+def unmap_category(no_classes, integer_label):
     integer_label = int(integer_label)  # safe check
-    integer_label = min(max(integer_label, 4), 10)
+    integer_label = min(max(integer_label, min(learning_classes)), max(learning_classes))
 
-    if no_classes == 2:
-        return reverse_mapping_2[integer_label]
-    if no_classes == 5:
-        return reverse_mapping_5[integer_label]
-    if no_classes == 7:
-        return integer_label
-        # return reverse_mapping_7[integer_label]
-    raise ValueError("No such class mapping!")
+    for reverse_mapping in list(reverse_mappings.keys()):
+        reverse_mapping = reverse_mappings[reverse_mapping]
+        if no_classes == reverse_mapping['no_classes']:
+            return reverse_mapping['definition'][integer_label]
+    return integer_label

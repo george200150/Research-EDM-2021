@@ -14,25 +14,31 @@ labels:
 
   mappings:
     mapping_2:
+      no_classes: 2
       d_type: str
       categories: ["P", "F"]
       definition: {"P": 10.0, "F": 1.0}
+      colors: { 'P': [ 0, 0, 255 ], 'F': [ 255, 0, 0 ] }
     mapping_5:
+      no_classes: 5
       d_type: str
       categories: [ "E", "G", "S", "F" ]
       definition: { "E": 10.0, "G": 8.0, "S": 6.0, "F": 4.0 }
+      colors: { 'E': [ 0, 0, 255 ], 'V': [ 0, 255, 255 ], 'G': [ 0, 255, 0 ], 'S': [ 255, 0, 255 ], 'F': [ 255, 0, 0 ] }
     mapping_7:
+      no_classes: 7
       d_type: int
       categories: [10, 9, 8, 7, 6, 5, 4]
       definition: {10: 10.0, 9: 9.0, 8: 8.0, 7: 7.0, 6: 6.0, 5: 5.0, 4: 4.0}
+      colors: { '10': [ 0, 255, 0 ], '9': [ 128, 128, 0 ], '8': [ 255, 0, 0 ], '7': [ 255, 101, 128 ], '6': [ 255, 0, 255 ], '5': [ 93, 144, 255 ], '4': [ 0, 0, 159 ] }
 
   reverse_mappings:
     reverse_mapping_2:
-      reverses: mapping_2
+      no_classes: 2
       definition: {10: "P", 9: "P", 8: "P", 7: "P", 6: "P", 5: "P", 4: "F", 3: "F", 2: "F", 1: "F"}
     reverse_mapping_5:
-      reverses: mapping_5
+      no_classes: 5
       definition: {10: "E", 9: "V", 8: "G", 7: "G", 6: "S", 5: "S", 4: "F", 3: "F", 2: "F", 1: "F"}
-    reverse_mapping_7:
-      reverses: mapping_7
-      definition: {10: "10", 9: "9", 8: "8", 7: "7", 6: "6", 5: "5", 4: "4", 3: "4", 2: "4", 1: "4"}
+#    reverse_mapping_7:
+#      no_classes: 7
+#      definition: {10: "10", 9: "9", 8: "8", 7: "7", 6: "6", 5: "5", 4: "4", 3: "4", 2: "4", 1: "4"}
