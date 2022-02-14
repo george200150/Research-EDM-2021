@@ -1,27 +1,43 @@
-classes_grades = [4, 5, 6, 7, 8, 9, 10]  # TODO: create yml config for ground truth class and remappings
-
-classes_categories_2 = ["P", "F"]
-classes_categories_4 = ["E", "G", "S", "F"]
-classes_categories_5 = ["E", "V", "G", "S", "F"]
-classes_categories_7 = [10, 9, 8, 7, 6, 5, 4]
+from research_edm.configs.paths import labels_yml_path
+from research_edm.io.yml_io import parse_yml
 
 
-mapping_2 = {"P": 10.0, "F": 1.0}
-mapping_4 = {"E": 10.0, "G": 8.0, "S": 6.0, "F": 4.0}
-mapping_5 = {"E": 10.0, "V": 9.0, "G": 8.0, "S": 6.0, "F": 4.0}
-mapping_7 = {10: 10.0, 9: 9.0, 8: 8.0, 7: 7.0, 6: 6.0, 5: 5.0, 4: 4.0}
+yml_dict = parse_yml(labels_yml_path)
+print(yml_dict)
 
-reverse_mapping_2 = {10: "P", 9: "P", 8: "P", 7: "P", 6: "P", 5: "P", 4: "F", 3: "F", 2: "F", 1: "F"}
-reverse_mapping_4 = {10: "E", 9: "G", 8: "G", 7: "G", 6: "S", 5: "S", 4: "F", 3: "F", 2: "F", 1: "F"}
-reverse_mapping_5 = {10: "E", 9: "V", 8: "G", 7: "G", 6: "S", 5: "S", 4: "F", 3: "F", 2: "F", 1: "F"}
-reverse_mapping_7 = {10: "10", 9: "9", 8: "8", 7: "7", 6: "6", 5: "5", 4: "4", 3: "4", 2: "4", 1: "4"}
+labels = yml_dict['labels']
+data_types = labels['data_types']
+learning = labels['learning']
+mappings = labels['mappings']
+reverse_mappings = labels['reverse_mappings']
 
-post_proc_remap_5 = {"E": "E", "V": "V", "G": "G", "S": "S", "F": "F"}
-post_proc_remap_4 = {"E": "E", "V": "G", "G": "G", "S": "S", "F": "F"}
-post_proc_remap_2 = {"E": "P", "V": "P", "G": "P", "S": "P", "F": "F"}
+classes_grades = learning['categories']
 
-grades_type = "grades"
-categories_type = "categories"
+
+obj_mapping_2 = mappings['mapping_2']
+obj_mapping_5 = mappings['mapping_5']
+obj_mapping_7 = mappings['mapping_7']
+
+classes_categories_2 = obj_mapping_2['categories']
+classes_categories_5 = obj_mapping_5['categories']
+classes_categories_7 = obj_mapping_7['categories']
+
+mapping_2 = obj_mapping_2['definition']
+mapping_5 = obj_mapping_5['definition']
+mapping_7 = obj_mapping_7['definition']
+
+
+obj_reverse_mapping_2 = reverse_mappings['reverse_mapping_2']
+obj_reverse_mapping_5 = reverse_mappings['reverse_mapping_5']
+obj_reverse_mapping_7 = reverse_mappings['reverse_mapping_7']
+
+reverse_mapping_2 = obj_reverse_mapping_2['definition']
+reverse_mapping_5 = obj_reverse_mapping_5['definition']
+reverse_mapping_7 = obj_reverse_mapping_7['definition']
+
+
+grades_type = data_types['grades_type']['name']
+categories_type = data_types['categories_type']['name']
 
 
 def get_data_type_of_dataset(no_classes, labels):  # TODO: parametrise the strategy; create a listing of partitions
@@ -42,7 +58,7 @@ def get_data_type_of_dataset(no_classes, labels):  # TODO: parametrise the strat
     raise ValueError("No labels found!")
 
 
-def get_data_type(dset_name):  # TODO: parametrise this; make it format-invariant
+def get_data_type(dset_name):  # TODO: use yml config
     if "note" in dset_name:
         return grades_type
     elif "categorii" in dset_name:
@@ -53,7 +69,7 @@ def get_data_type(dset_name):  # TODO: parametrise this; make it format-invarian
         raise ValueError("Dataset type not recognised!")
 
 
-def map_category(no_classes, string_label):
+def map_category(no_classes, string_label):  # TODO: use yml config
     if no_classes == 2:
         return mapping_2[string_label]
     if no_classes == 5:
@@ -63,7 +79,7 @@ def map_category(no_classes, string_label):
     raise ValueError("No such class mapping!")
 
 
-def unmap_category(no_classes, integer_label):
+def unmap_category(no_classes, integer_label):  # TODO: use yml config
     integer_label = int(integer_label)  # safe check
     integer_label = min(max(integer_label, 4), 10)
 

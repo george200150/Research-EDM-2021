@@ -18,6 +18,9 @@ base_dump_xlxs = os.path.join(path_to_project, r"research_edm\evaluation\results
 clustering_dump_base = os.path.join(path_to_project, r"research_edm\clustering\clustering_dump")
 plot_dump_base = os.path.join(path_to_project, r"research_edm\clustering\plot_dump")
 
+main_yml_path = os.path.join(path_to_project, r"supervised_experiment_config.yml")
+labels_yml_path = os.path.join(datasets_base_path, r"gt_labels_information.yml")
+
 paths_filename = "results_paths.pkl"
 unsupervised_results_dir = "unsupervised"
 supervised_results_dir = "supervised"

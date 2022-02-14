@@ -1,11 +1,10 @@
 import random
 import os
 import numpy as np
-import yaml
 
 from research_edm.clustering.main_clustering import main_cluster
 from research_edm.configs.paths import results_paths_dump_base, paths_filename, datasets_base_path, \
-    dataset_listings_path, reserved_model_names_path
+    dataset_listings_path, main_yml_path
 from research_edm.dataloader.feature_extractor import get_features_labels
 from research_edm.evaluation.classification_metrics import get_quality_metrix
 from research_edm.evaluation.main_evaluation import main_evaluation
@@ -13,6 +12,7 @@ from research_edm.inference.create_onehot_categorical_labels_mapping import main
 from research_edm.inference.generate_dataset_shuffle_masks import main_generate_masks
 from research_edm.inference.main_inference import main_inference
 from research_edm.io.pickle_io import dump_data, get_paths_list
+from research_edm.io.yml_io import parse_yml
 from research_edm.normalisation.main_get_mean_stdev import main_norm
 from research_edm.normalisation.postprocessing import preprocessings_listing, default_t
 
@@ -97,16 +97,8 @@ def main_pipeline_supervised_ONLY_EVAL(no_classes):
         main_evaluation(no_classes, paths_to_models, "supervised")
 
 
-def parse_yml():
-    with open("supervised_experiment_config.yml", "r") as stream:
-        try:
-            return yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-
-
 def read_parsed_yml():
-    yml_dict = parse_yml()
+    yml_dict = parse_yml(main_yml_path)
     print(yml_dict)
 
     experiment = yml_dict['experiment']
